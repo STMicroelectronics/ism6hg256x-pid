@@ -5590,12 +5590,13 @@ int32_t ism6hg256x_sh_cfg_write(const stmdev_ctx_t *ctx,
                                 ism6hg256x_sh_cfg_write_t *val);
 typedef enum
 {
-  ISM6HG256X_SH_15Hz  = 0x1,
-  ISM6HG256X_SH_30Hz  = 0x2,
-  ISM6HG256X_SH_60Hz  = 0x3,
-  ISM6HG256X_SH_120Hz = 0x4,
-  ISM6HG256X_SH_240Hz = 0x5,
-  ISM6HG256X_SH_480Hz = 0x6,
+  ISM6HG256X_SH_1Hz875  = 0x0,
+  ISM6HG256X_SH_15Hz    = 0x1,
+  ISM6HG256X_SH_30Hz    = 0x2,
+  ISM6HG256X_SH_60Hz    = 0x3,
+  ISM6HG256X_SH_120Hz   = 0x4,
+  ISM6HG256X_SH_240Hz   = 0x5,
+  ISM6HG256X_SH_480Hz   = 0x6,
 } ism6hg256x_sh_data_rate_t;
 int32_t ism6hg256x_sh_data_rate_set(const stmdev_ctx_t *ctx,
                                     ism6hg256x_sh_data_rate_t val);

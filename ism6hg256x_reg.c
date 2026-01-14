@@ -10561,6 +10561,9 @@ int32_t ism6hg256x_sh_data_rate_get(const stmdev_ctx_t *ctx,
 
   switch (tgt0_config.shub_odr)
   {
+    case ISM6HG256X_SH_1Hz875:
+      *val = ISM6HG256X_SH_1Hz875;
+      break;
     case ISM6HG256X_SH_15Hz:
       *val = ISM6HG256X_SH_15Hz;
       break;
