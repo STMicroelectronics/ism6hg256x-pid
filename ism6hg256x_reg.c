@@ -10835,7 +10835,7 @@ int32_t ism6hg256x_sh_cfg_write(const stmdev_ctx_t *ctx,
     goto exit;
   }
 
-  reg.target0_add = val->tgt0_add;
+  reg.target0_add = (uint8_t)(val->tgt0_add >> 1);
   reg.rw_0 = 0;
   ret = ism6hg256x_write_reg(ctx, ISM6HG256X_TGT0_ADD, (uint8_t *)&reg, 1);
   if (ret != 0)
@@ -10977,7 +10977,7 @@ int32_t ism6hg256x_sh_tgt_cfg_read(const stmdev_ctx_t *ctx, uint8_t idx,
     return ret;
   }
 
-  tgt_add.target0_add = val->tgt_add;
+  tgt_add.target0_add = (uint8_t)(val->tgt_add >> 1);
   tgt_add.rw_0 = 1;
   ret = ism6hg256x_write_reg(ctx, ISM6HG256X_TGT0_ADD + idx * 3U,
                              (uint8_t *)&tgt_add, 1);
