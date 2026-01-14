@@ -5152,7 +5152,7 @@ typedef enum
 {
   ISM6HG256X_WK_FEED_SLOPE          = 0x0,
   ISM6HG256X_WK_FEED_HIGH_PASS      = 0x1,
-  ISM6HG256X_WK_FEED_LP_WITH_OFFSET = 0x2,
+  ISM6HG256X_WK_FEED_LP_WITH_OFFSET = 0x3,
 } ism6hg256x_filt_wkup_act_feed_t;
 int32_t ism6hg256x_filt_wkup_act_feed_set(const stmdev_ctx_t *ctx,
                                           ism6hg256x_filt_wkup_act_feed_t val);
