@@ -530,6 +530,11 @@ int32_t ism6hg256x_reboot(const stmdev_ctx_t *ctx)
 {
   ism6hg256x_ctrl3_t ctrl3;
   int32_t ret;
+  /* configuration to restore after reboot */
+  ism6hg256x_data_rate_t xl;
+  ism6hg256x_data_rate_t gy;
+  ism6hg256x_hg_xl_data_rate_t hg_xl;
+  uint8_t reg_out_en;
 
   if (ctx->mdelay == NULL)
   {
@@ -538,6 +543,15 @@ int32_t ism6hg256x_reboot(const stmdev_ctx_t *ctx)
   }
 
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL3, (uint8_t *)&ctrl3, 1);
+  if (ret != 0)
+  {
+    goto exit;
+  }
+
+  /* Save current data rates */
+  ret = ism6hg256x_xl_data_rate_get(ctx, &xl);
+  ret += ism6hg256x_gy_data_rate_get(ctx, &gy);
+  ret += ism6hg256x_hg_xl_data_rate_get(ctx, &hg_xl, &reg_out_en);
   if (ret != 0)
   {
     goto exit;
@@ -562,6 +576,11 @@ int32_t ism6hg256x_reboot(const stmdev_ctx_t *ctx)
 
   /* 3. Wait 30 ms. */
   ctx->mdelay(30);
+
+  /* Restore data rates */
+  ret = ism6hg256x_xl_data_rate_set(ctx, xl);
+  ret += ism6hg256x_gy_data_rate_set(ctx, gy);
+  ret += ism6hg256x_hg_xl_data_rate_set(ctx, hg_xl, reg_out_en);
 
 exit:
   return ret;
