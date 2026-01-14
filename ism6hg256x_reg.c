@@ -1819,17 +1819,38 @@ int32_t ism6hg256x_interrupt_enable_get(const stmdev_ctx_t *ctx,
 int32_t ism6hg256x_gy_full_scale_set(const stmdev_ctx_t *ctx,
                                      ism6hg256x_gy_full_scale_t val)
 {
+  ism6hg256x_ctrl2_t ctrl2;
+  ism6hg256x_ctrl2_t prev_ctrl2;
   ism6hg256x_ctrl6_t ctrl6;
   int32_t ret;
 
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL6, (uint8_t *)&ctrl6, 1);
+  ret += ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
+  prev_ctrl2 = ctrl2;
 
-  if (ret == 0)
+  if (ret != 0)
   {
-    ctrl6.fs_g = (uint8_t)val & 0xfu;
-    ret = ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL6, (uint8_t *)&ctrl6, 1);
+    goto exit;
   }
 
+  // For the correct operation of the device, the user must set a
+  // configuration from 001 to 101 when the gyroscope is in power-down mode.
+  if (ctrl2.odr_g != ISM6HG256X_ODR_OFF)
+  {
+    ctrl2.odr_g = ISM6HG256X_ODR_OFF;
+    ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
+  }
+
+  ctrl6.fs_g = (uint8_t)val & 0xfu;
+  ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL6, (uint8_t *)&ctrl6, 1);
+
+  // restore previous odr set
+  if (prev_ctrl2.odr_g != ISM6HG256X_ODR_OFF)
+  {
+    ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&prev_ctrl2, 1);
+  }
+
+exit:
   return ret;
 }
 
@@ -4514,17 +4535,38 @@ int32_t ism6hg256x_den_polarity_get(const stmdev_ctx_t *ctx,
 int32_t ism6hg256x_eis_gy_full_scale_set(const stmdev_ctx_t *ctx,
                                          ism6hg256x_eis_gy_full_scale_t val)
 {
+  ism6hg256x_ctrl2_t ctrl2;
+  ism6hg256x_ctrl2_t prev_ctrl2;
   ism6hg256x_ctrl_eis_t ctrl_eis;
   int32_t ret;
 
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
+  ret += ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
+  prev_ctrl2 = ctrl2;
 
-  if (ret == 0)
+  if (ret != 0)
   {
-    ctrl_eis.fs_g_eis = (uint8_t)val & 0x7U;
-    ret = ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
+    goto exit;
   }
 
+  // For the correct operation of the device, the user must set a
+  // configuration from 001 to 101 when the gyroscope is in power-down mode.
+  if (ctrl2.odr_g != ISM6HG256X_ODR_OFF)
+  {
+    ctrl2.odr_g = ISM6HG256X_ODR_OFF;
+    ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
+  }
+
+  ctrl_eis.fs_g_eis = (uint8_t)val & 0x7U;
+  ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
+
+  // restore previous odr set
+  if (prev_ctrl2.odr_g != ISM6HG256X_ODR_OFF)
+  {
+    ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&prev_ctrl2, 1);
+  }
+
+exit:
   return ret;
 }
 
