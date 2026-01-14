@@ -1037,9 +1037,10 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
 /**
   * @brief  HG Accelerometer output data rate (ODR) selection.[set]
   *
-  * @param  ctx      read / write interface definitions
-  * @param  val      ism6hg256x_hg_xl_data_rate_t enum
-  * @retval          interface status (MANDATORY: return 0 -> no Error)
+  * @param  ctx         read / write interface definitions
+  * @param  val         ism6hg256x_hg_xl_data_rate_t enum
+  * @param  reg_out_en  enables read of high-g accelerometer channel
+  * @retval             interface status (MANDATORY: return 0 -> no Error)
   *
   */
 int32_t ism6hg256x_hg_xl_data_rate_set(const stmdev_ctx_t *ctx,
@@ -6673,7 +6674,7 @@ int32_t ism6hg256x_filt_xl_setup(const stmdev_ctx_t *ctx, ism6hg256x_xl_filter f
 
   if ((filter == ISM6HG256X_XL_FILT_HP && bw == ISM6HG256X_XL_ULTRA_LIGHT) ||
       (hp_ref_mode_xl == 1 && filter != ISM6HG256X_XL_FILT_HP) ||
-      // if bw == 0 slope filter is used istead of digital HP filter
+      // if bw == 0 slope filter is used instead of digital HP filter
       (filter == ISM6HG256X_XL_FILT_HP_SLOPE && (uint8_t)bw != 0x0))
   {
     ret = -1;
