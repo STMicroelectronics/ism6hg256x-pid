@@ -4679,9 +4679,26 @@ int32_t ism6hg256x_gy_eis_data_rate_set(const stmdev_ctx_t *ctx,
                                         ism6hg256x_gy_eis_data_rate_t val)
 {
   ism6hg256x_ctrl_eis_t ctrl_eis;
+  ism6hg256x_ctrl2_t ctrl2;
   int32_t ret;
 
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
+  ret += ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
+
+  if (ret != 0)
+  {
+    goto exit;
+  }
+
+  // eis odr can be changed only if gy ui is set in high-performance or
+  // high-accuracy modes
+  if (val != 0x00 &&
+      ctrl2.op_mode_g != ISM6HG256X_GY_HIGH_PERFORMANCE_MD &&
+      ctrl2.op_mode_g != ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD)
+  {
+    ret = -1;
+    goto exit;
+  }
 
   if (ret == 0)
   {
@@ -4689,6 +4706,7 @@ int32_t ism6hg256x_gy_eis_data_rate_set(const stmdev_ctx_t *ctx,
     ret = ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
   }
 
+exit:
   return ret;
 }
 
