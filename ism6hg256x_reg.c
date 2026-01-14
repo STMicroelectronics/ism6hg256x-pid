@@ -9608,7 +9608,7 @@ int32_t ism6hg256x_ois_gy_full_scale_set(const stmdev_ctx_t *ctx,
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_UI_CTRL2_OIS, (uint8_t *)&ui_ctrl2_ois, 1);
   if (ret == 0)
   {
-    ui_ctrl2_ois.fs_g_ois = (uint8_t)val & 0x03U;
+    ui_ctrl2_ois.fs_g_ois = (uint8_t)val & 0x07U;
     ret = ism6hg256x_write_reg(ctx, ISM6HG256X_UI_CTRL2_OIS, (uint8_t *)&ui_ctrl2_ois, 1);
   }
 
