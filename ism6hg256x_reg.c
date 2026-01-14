@@ -6157,6 +6157,11 @@ int32_t ism6hg256x_fifo_sh_batch_target_set(const stmdev_ctx_t *ctx, uint8_t idx
   ism6hg256x_tgt0_config_t tgt_config;
   int32_t ret;
 
+  if (idx > 3)
+  {
+    return -1;
+  }
+
   ret = ism6hg256x_mem_bank_set(ctx, ISM6HG256X_SENSOR_HUB_MEM_BANK);
   if (ret != 0)
   {
@@ -6189,6 +6194,11 @@ int32_t ism6hg256x_fifo_sh_batch_target_get(const stmdev_ctx_t *ctx, uint8_t idx
 {
   ism6hg256x_tgt0_config_t tgt_config;
   int32_t ret;
+
+  if (idx > 3)
+  {
+    return -1;
+  }
 
   ret = ism6hg256x_mem_bank_set(ctx, ISM6HG256X_SENSOR_HUB_MEM_BANK);
   if (ret != 0)
@@ -10581,6 +10591,11 @@ int32_t ism6hg256x_sh_tgt_cfg_read(const stmdev_ctx_t *ctx, uint8_t idx,
   ism6hg256x_tgt0_add_t tgt_add;
   ism6hg256x_tgt0_config_t tgt_config;
   int32_t ret;
+
+  if (idx > 3)
+  {
+    return -1;
+  }
 
   ret = ism6hg256x_mem_bank_set(ctx, ISM6HG256X_SENSOR_HUB_MEM_BANK);
   if (ret != 0)
