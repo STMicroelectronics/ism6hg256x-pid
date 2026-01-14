@@ -4425,10 +4425,12 @@ typedef enum
   ISM6HG256X_ODR_HA03_AT_3333Hz   = 0x3B,
   ISM6HG256X_ODR_HA03_AT_6667Hz   = 0x3C,
 } ism6hg256x_data_rate_t;
+// Deprecated: use xl_setup function instead
 int32_t ism6hg256x_xl_data_rate_set(const stmdev_ctx_t *ctx,
                                     ism6hg256x_data_rate_t val);
 int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
                                     ism6hg256x_data_rate_t *val);
+// Deprecated: use gy_setup function instead
 int32_t ism6hg256x_gy_data_rate_set(const stmdev_ctx_t *ctx,
                                     ism6hg256x_data_rate_t val);
 int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
@@ -4460,6 +4462,7 @@ typedef enum
   ISM6HG256X_XL_LOW_POWER_8_AVG_MD    = 0x6,
   ISM6HG256X_XL_NORMAL_MD             = 0x7,
 } ism6hg256x_xl_mode_t;
+// Deprecated: use xl_setup function instead
 int32_t ism6hg256x_xl_mode_set(const stmdev_ctx_t *ctx, ism6hg256x_xl_mode_t val);
 int32_t ism6hg256x_xl_mode_get(const stmdev_ctx_t *ctx, ism6hg256x_xl_mode_t *val);
 
@@ -4471,6 +4474,7 @@ typedef enum
   ISM6HG256X_GY_SLEEP_MD              = 0x4,
   ISM6HG256X_GY_LOW_POWER_MD          = 0x5,
 } ism6hg256x_gy_mode_t;
+// Deprecated: use gy_setup function instead
 int32_t ism6hg256x_gy_mode_set(const stmdev_ctx_t *ctx, ism6hg256x_gy_mode_t val);
 int32_t ism6hg256x_gy_mode_get(const stmdev_ctx_t *ctx, ism6hg256x_gy_mode_t *val);
 
@@ -4862,6 +4866,23 @@ int32_t ism6hg256x_gy_eis_data_rate_set(const stmdev_ctx_t *ctx,
                                         ism6hg256x_gy_eis_data_rate_t val);
 int32_t ism6hg256x_gy_eis_data_rate_get(const stmdev_ctx_t *ctx,
                                         ism6hg256x_gy_eis_data_rate_t *val);
+
+int32_t ism6hg256x_haodr_set(
+  const stmdev_ctx_t *ctx,
+  ism6hg256x_data_rate_t xl_odr,
+  ism6hg256x_xl_mode_t xl_mode,
+  ism6hg256x_data_rate_t gy_odr,
+  ism6hg256x_gy_mode_t gy_mode);
+
+int32_t ism6hg256x_xl_setup(
+  const stmdev_ctx_t *ctx,
+  ism6hg256x_data_rate_t xl_odr,
+  ism6hg256x_xl_mode_t xl_mode);
+
+int32_t ism6hg256x_gy_setup(
+  const stmdev_ctx_t *ctx,
+  ism6hg256x_data_rate_t gy_odr,
+  ism6hg256x_gy_mode_t gy_mode);
 
 int32_t ism6hg256x_fifo_watermark_set(const stmdev_ctx_t *ctx, uint8_t val);
 int32_t ism6hg256x_fifo_watermark_get(const stmdev_ctx_t *ctx, uint8_t *val);
