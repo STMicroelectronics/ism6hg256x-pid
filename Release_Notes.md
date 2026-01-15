@@ -56,13 +56,39 @@ This directory contains the ISM6HG256X component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section3" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section3" aria-hidden="true">
 <label for="collapse-section3" aria-hidden="true">V3.0.0 / 05-Nov-2025</label>
 <div>
 
 ## Main changes
 
 - Upgrade reset APIs
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section4" checked aria-hidden="true">
+<label for="collapse-section4" aria-hidden="true">V4.0.0 / 15-Jan-2026</label>
+<div>
+
+## Main changes
+
+- Convert I2C address representation from 7-bit to 8-bit in sensor-hub
+- Add haodr_set, xl_setup and gy_setup to comply with the AN
+- Fix docs: typo in filt_xl_setup, hg_xl_data_rate_set
+- Split pin_int for clearer configuration
+- Fix pad_strength values
+- Add missing variant (1.875Hz) for sh_data_rate enum
+- Fix bit masking in ois_gy_full_scale_set API
+- Fix reboot by restoring previous data rates after reboot
+- Fix filt_wkup_act_feed enum values
+- Add check on idx for sensor-hub target
+- Add constraints while changing eis odr
+- Add filt_xl_setup API to handle filter lpf2 settings
+- Add power-off gyro when changing the full-scale (ui and eis)
+- Fix type for x/y/z_ofs_usr. Change type from uint8_t to int8_t
+- Add read for ctrl9 in xl_offset_mg_set and improved doc
 
 ##
 
