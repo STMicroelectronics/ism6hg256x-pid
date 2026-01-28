@@ -68,7 +68,7 @@ This directory contains the ISM6HG256X component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section4" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section4" aria-hidden="true">
 <label for="collapse-section4" aria-hidden="true">V4.0.0 / 15-Jan-2026</label>
 <div>
 
@@ -93,8 +93,20 @@ This directory contains the ISM6HG256X component drivers.
 ##
 
 </div>
-:::
 
+<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<label for="collapse-section5" aria-hidden="true">V4.1.0 / 28-Jan-2026</label>
+<div>
+
+## Main changes
+
+- Move doxygen comment blocks from .c to .h
+- Fix [deprecated] clause
+
+##
+
+</div>
+:::
 
 
 :::
