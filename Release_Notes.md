@@ -30,44 +30,18 @@ This directory contains the ISM6HG256X component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section1" aria-hidden="true">
-<label for="collapse-section1" aria-hidden="true">V1.0.0 / 17-Sep-2025</label>
+<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<label for="collapse-section5" aria-hidden="true">V4.1.0 / 28-Jan-2026</label>
 <div>
 
 ## Main changes
 
-### First release
-
-- First official release [ref. DS v1.0]
-
-##
-
-</div>
-
-<input type="checkbox" id="collapse-section2" aria-hidden="true">
-<label for="collapse-section2" aria-hidden="true">V2.0.0 / 07-Oct-2025</label>
-<div>
-
-## Main changes
-
-- Add routine to reset SFLP game rotation logic
+- Move doxygen comment blocks from .c to .h
+- Fix [deprecated] clause
 
 ##
 
 </div>
-
-<input type="checkbox" id="collapse-section3" aria-hidden="true">
-<label for="collapse-section3" aria-hidden="true">V3.0.0 / 05-Nov-2025</label>
-<div>
-
-## Main changes
-
-- Upgrade reset APIs
-
-##
-
-</div>
-
 <input type="checkbox" id="collapse-section4" aria-hidden="true">
 <label for="collapse-section4" aria-hidden="true">V4.0.0 / 15-Jan-2026</label>
 <div>
@@ -94,18 +68,44 @@ This directory contains the ISM6HG256X component drivers.
 
 </div>
 
-<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
-<label for="collapse-section5" aria-hidden="true">V4.1.0 / 28-Jan-2026</label>
+<input type="checkbox" id="collapse-section3" aria-hidden="true">
+<label for="collapse-section3" aria-hidden="true">V3.0.0 / 05-Nov-2025</label>
 <div>
 
 ## Main changes
 
-- Move doxygen comment blocks from .c to .h
-- Fix [deprecated] clause
+- Upgrade reset APIs
 
 ##
 
 </div>
+
+<input type="checkbox" id="collapse-section2" aria-hidden="true">
+<label for="collapse-section2" aria-hidden="true">V2.0.0 / 07-Oct-2025</label>
+<div>
+
+## Main changes
+
+- Add routine to reset SFLP game rotation logic
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section1" aria-hidden="true">
+<label for="collapse-section1" aria-hidden="true">V1.0.0 / 17-Sep-2025</label>
+<div>
+
+## Main changes
+
+### First release
+
+- First official release [ref. DS v1.0]
+
+##
+
+</div>
+
 :::
 
 
