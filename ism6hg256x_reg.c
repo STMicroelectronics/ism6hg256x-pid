@@ -595,6 +595,7 @@ int32_t ism6hg256x_xl_setup(
   ism6hg256x_ctrl2_t ctrl2;
   ism6hg256x_haodr_cfg_t haodr;
   uint8_t xl_ha = ((uint8_t) xl_odr >> 4) & 0xFU;
+  uint8_t both_on;
 
   // Table 10 of AN6353
   // 1.875 Hz allowed only in Low-power modes
@@ -656,8 +657,8 @@ int32_t ism6hg256x_xl_setup(
   }
 
   // cross-checking haodr mode
-  uint8_t both_on = ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
-                    ctrl2.odr_g != ISM6HG256X_ODR_OFF ? 1 : 0;
+  both_on = ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
+            ctrl2.odr_g != ISM6HG256X_ODR_OFF ? 1 : 0;
 
   // if both on, then haodr_sel is a shared bit. Could be changed through haodr_set API
   if (both_on && (xl_ha != haodr.haodr_sel))
@@ -680,7 +681,8 @@ int32_t ism6hg256x_xl_setup(
       (xl_mode == ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD || // check if mode to set is HAODR
        ctrl1.op_mode_xl == ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD)) // check if previous mode was HAODR
   {
-    ret += ism6hg256x_haodr_set(ctx, xl_odr, xl_mode, ctrl2.odr_g, ctrl2.op_mode_g);
+    ret += ism6hg256x_haodr_set(ctx, xl_odr, xl_mode, (ism6hg256x_data_rate_t)ctrl2.odr_g,
+                                (ism6hg256x_gy_mode_t)ctrl2.op_mode_g);
   }
   else
   {
@@ -707,6 +709,7 @@ int32_t ism6hg256x_gy_setup(
   ism6hg256x_ctrl2_t ctrl2;
   ism6hg256x_haodr_cfg_t haodr;
   uint8_t gy_ha = ((uint8_t) gy_odr >> 4) & 0xFU;
+  uint8_t both_on;
 
   // Table 13 of AN6353
   // 7.5Hz with HAODR mode enable, is already handled by the enum selection
@@ -746,8 +749,8 @@ int32_t ism6hg256x_gy_setup(
   }
 
   // cross-checking haodr mode
-  uint8_t both_on = ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
-                    ctrl2.odr_g != ISM6HG256X_ODR_OFF ? 1 : 0;
+  both_on = ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
+            ctrl2.odr_g != ISM6HG256X_ODR_OFF ? 1 : 0;
 
   // if both on, then haodr_sel is a shared bit
   if (both_on && (gy_ha != haodr.haodr_sel))
@@ -763,7 +766,8 @@ int32_t ism6hg256x_gy_setup(
       (gy_mode == ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD || // check if mode to set is HAODR
        ctrl2.op_mode_g == ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD)) // check if previous mode was HAODR
   {
-    ret += ism6hg256x_haodr_set(ctx, ctrl1.odr_xl, ctrl1.op_mode_xl, gy_odr, gy_mode);
+    ret += ism6hg256x_haodr_set(ctx, (ism6hg256x_data_rate_t)ctrl1.odr_xl,
+                                (ism6hg256x_xl_mode_t)ctrl1.op_mode_xl, gy_odr, gy_mode);
   }
   else
   {
@@ -791,6 +795,9 @@ int32_t ism6hg256x_haodr_set(
   ism6hg256x_ctrl2_t ctrl2;
   ism6hg256x_haodr_cfg_t haodr;
   ism6hg256x_ctrl1_xl_hg_t ctrl1_xl_hg;
+  ism6hg256x_xl_mode_t prev_mode;
+  ism6hg256x_ctrl1_xl_hg_t ctrl1_xl_hg_prev;
+  ism6hg256x_ctrl_eis_t ctrl_eis_prev;
   ism6hg256x_ctrl_eis_t ctrl_eis;
   int32_t ret;
 
@@ -816,9 +823,9 @@ int32_t ism6hg256x_haodr_set(
   ret += ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL1_XL_HG, (uint8_t *)&ctrl1_xl_hg, 1);
   ret += ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
 
-  ism6hg256x_xl_mode_t prev_mode = ctrl1.op_mode_xl;
-  ism6hg256x_ctrl1_xl_hg_t ctrl1_xl_hg_prev = ctrl1_xl_hg;
-  ism6hg256x_ctrl_eis_t ctrl_eis_prev = ctrl_eis;
+  prev_mode = (ism6hg256x_xl_mode_t) ctrl1.op_mode_xl;
+  ctrl1_xl_hg_prev = ctrl1_xl_hg;
+  ctrl_eis_prev = ctrl_eis;
 
   if (ret != 0)
   {
