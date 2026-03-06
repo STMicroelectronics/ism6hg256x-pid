@@ -30,7 +30,20 @@ This directory contains the ISM6HG256X component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section5" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section6" checked aria-hidden="true">
+<label for="collapse-section6" aria-hidden="true">V4.1.1 / 06-Mar-2026</label>
+<div>
+
+## Main changes
+
+- fix build warnings
+- Re-order update history with most updated on top
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section5" aria-hidden="true">
 <label for="collapse-section5" aria-hidden="true">V4.1.0 / 28-Jan-2026</label>
 <div>
 
@@ -42,6 +55,7 @@ This directory contains the ISM6HG256X component drivers.
 ##
 
 </div>
+
 <input type="checkbox" id="collapse-section4" aria-hidden="true">
 <label for="collapse-section4" aria-hidden="true">V4.0.0 / 15-Jan-2026</label>
 <div>
