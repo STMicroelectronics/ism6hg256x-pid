@@ -5470,7 +5470,7 @@ typedef enum
 {
   ISM6HG256X_32g  = 0x0,
   ISM6HG256X_64g  = 0x1,
-  ISM6HG256X_128g  = 0x2,
+  ISM6HG256X_128g = 0x2,
   ISM6HG256X_256g = 0x3,
 } ism6hg256x_hg_xl_full_scale_t;
 
