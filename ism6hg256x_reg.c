@@ -657,11 +657,11 @@ int32_t ism6hg256x_xl_setup(
   }
 
   // cross-checking haodr mode
-  both_on = ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
-            ctrl2.odr_g != ISM6HG256X_ODR_OFF ? 1 : 0;
+  both_on = ctrl1.odr_xl != (uint8_t)ISM6HG256X_ODR_OFF &&
+            ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF ? 1 : 0;
 
   // if both on, then haodr_sel is a shared bit. Could be changed through haodr_set API
-  if (both_on && (xl_ha != haodr.haodr_sel))
+  if (both_on == 1 && (xl_ha != haodr.haodr_sel))
   {
     ret = -1;
     goto exit;
@@ -677,9 +677,10 @@ int32_t ism6hg256x_xl_setup(
   // Switching (enable/disable) HAODR mode require that all sensors must be in power-down mode.
   // Note: if both sensors are ON, ism6hg256x_haodr_set function must be used.
   if (haodr.haodr_sel != xl_ha &&
-      ctrl1.op_mode_xl != xl_mode && // check if mode switch is required
+      ctrl1.op_mode_xl != (uint8_t)xl_mode && // check if mode switch is required
       (xl_mode == ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD || // check if mode to set is HAODR
-       ctrl1.op_mode_xl == ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD)) // check if previous mode was HAODR
+       ctrl1.op_mode_xl == (uint8_t)
+       ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD)) // check if previous mode was HAODR
   {
     ret += ism6hg256x_haodr_set(ctx, xl_odr, xl_mode, (ism6hg256x_data_rate_t)ctrl2.odr_g,
                                 (ism6hg256x_gy_mode_t)ctrl2.op_mode_g);
@@ -687,8 +688,8 @@ int32_t ism6hg256x_xl_setup(
   else
   {
     // if HAODR switch is not required, just set ctrl1 settings
-    ctrl1.op_mode_xl = xl_mode;
-    ctrl1.odr_xl = xl_odr;
+    ctrl1.op_mode_xl = (uint8_t)xl_mode;
+    ctrl1.odr_xl = (uint8_t)xl_odr;
     haodr.haodr_sel = xl_ha;
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL1, (uint8_t *)&ctrl1, 1);
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_HAODR_CFG, (uint8_t *)&haodr, 1);
@@ -749,11 +750,11 @@ int32_t ism6hg256x_gy_setup(
   }
 
   // cross-checking haodr mode
-  both_on = ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
-            ctrl2.odr_g != ISM6HG256X_ODR_OFF ? 1 : 0;
+  both_on = ctrl1.odr_xl != (uint8_t)ISM6HG256X_ODR_OFF &&
+            ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF ? 1 : 0;
 
   // if both on, then haodr_sel is a shared bit
-  if (both_on && (gy_ha != haodr.haodr_sel))
+  if (both_on == 1 && (gy_ha != haodr.haodr_sel))
   {
     ret = -1;
     goto exit;
@@ -762,9 +763,9 @@ int32_t ism6hg256x_gy_setup(
   // Switching (enable/disable) HAODR mode require that all sensors must be in power-down mode.
   // Note: ism6hg256x_haodr_set function should be called first.
   if (haodr.haodr_sel != gy_ha &&
-      ctrl2.op_mode_g != gy_mode && // check if mode switch is required (prev. != new)
+      ctrl2.op_mode_g != (uint8_t)gy_mode && // check if mode switch is required (prev. != new)
       (gy_mode == ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD || // check if mode to set is HAODR
-       ctrl2.op_mode_g == ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD)) // check if previous mode was HAODR
+       ctrl2.op_mode_g == (uint8_t)ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD)) // check if previous mode was HAODR
   {
     ret += ism6hg256x_haodr_set(ctx, (ism6hg256x_data_rate_t)ctrl1.odr_xl,
                                 (ism6hg256x_xl_mode_t)ctrl1.op_mode_xl, gy_odr, gy_mode);
@@ -772,8 +773,8 @@ int32_t ism6hg256x_gy_setup(
   else
   {
     // if HAODR switch is not required, just set ctrl2 settings
-    ctrl2.op_mode_g = gy_mode;
-    ctrl2.odr_g = gy_odr;
+    ctrl2.op_mode_g = (uint8_t)gy_mode;
+    ctrl2.odr_g = (uint8_t)gy_odr;
     haodr.haodr_sel = gy_ha;
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_HAODR_CFG, (uint8_t *)&haodr, 1);
@@ -811,7 +812,7 @@ int32_t ism6hg256x_haodr_set(
     goto exit;
   }
 
-  if (both_on && (xl_ha != gy_ha))
+  if (both_on == 1 && (xl_ha != gy_ha))
   {
     ret = -1;
     goto exit;
@@ -833,27 +834,27 @@ int32_t ism6hg256x_haodr_set(
   }
 
   // Enabling/disabling HAODR mode require to have all sensors in power-down mode
-  ctrl1.odr_xl = ISM6HG256X_ODR_OFF;
-  ctrl2.odr_g = ISM6HG256X_ODR_OFF;
-  ctrl1_xl_hg.odr_xl_hg = ISM6HG256X_HG_XL_ODR_OFF;
+  ctrl1.odr_xl = (uint8_t)ISM6HG256X_ODR_OFF;
+  ctrl2.odr_g = (uint8_t)ISM6HG256X_ODR_OFF;
+  ctrl1_xl_hg.odr_xl_hg = (uint8_t)ISM6HG256X_HG_XL_ODR_OFF;
   ctrl1_xl_hg.xl_hg_regout_en = 0;
-  ctrl_eis.odr_g_eis = ISM6HG256X_EIS_ODR_OFF;
+  ctrl_eis.odr_g_eis = (uint8_t)ISM6HG256X_EIS_ODR_OFF;
   ret = ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL1, (uint8_t *)&ctrl1, 1);
   ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
   // avoid turning off if already off
-  if (ctrl1_xl_hg_prev.odr_xl_hg != ISM6HG256X_HG_XL_ODR_OFF)
+  if (ctrl1_xl_hg_prev.odr_xl_hg != (uint8_t)ISM6HG256X_HG_XL_ODR_OFF)
   {
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL1_XL_HG, (uint8_t *)&ctrl1_xl_hg, 1);
   }
-  if (ctrl_eis_prev.odr_g_eis != ISM6HG256X_EIS_ODR_OFF)
+  if (ctrl_eis_prev.odr_g_eis != (uint8_t)ISM6HG256X_EIS_ODR_OFF)
   {
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
   }
 
   // set HAODR
   haodr.haodr_sel = xl_ha | gy_ha;
-  ctrl1.op_mode_xl = xl_mode;
-  ctrl2.op_mode_g = gy_mode;
+  ctrl1.op_mode_xl = (uint8_t)xl_mode;
+  ctrl2.op_mode_g = (uint8_t)gy_mode;
 
   ret += ism6hg256x_write_reg(ctx, ISM6HG256X_HAODR_CFG, (uint8_t *)&haodr, 1);
   ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL1, (uint8_t *)&ctrl1, 1);
@@ -865,16 +866,16 @@ int32_t ism6hg256x_haodr_set(
   }
 
   // set xl and gy data rates and restore high-g xl and eis to their previous data rates
-  ctrl1.odr_xl = xl_odr;
-  ctrl2.odr_g = gy_odr;
+  ctrl1.odr_xl = (uint8_t)xl_odr;
+  ctrl2.odr_g = (uint8_t)gy_odr;
   ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL1, (uint8_t *)&ctrl1, 1);
   ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
   // if off, there is no need to turn them on
-  if (ctrl1_xl_hg_prev.odr_xl_hg != ISM6HG256X_HG_XL_ODR_OFF)
+  if (ctrl1_xl_hg_prev.odr_xl_hg != (uint8_t)ISM6HG256X_HG_XL_ODR_OFF)
   {
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL1_XL_HG, (uint8_t *)&ctrl1_xl_hg_prev, 1);
   }
-  if (ctrl_eis_prev.odr_g_eis != ISM6HG256X_EIS_ODR_OFF)
+  if (ctrl_eis_prev.odr_g_eis != (uint8_t)ISM6HG256X_EIS_ODR_OFF)
   {
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis_prev, 1);
   }
@@ -1168,19 +1169,19 @@ int32_t ism6hg256x_hg_xl_data_rate_set(const stmdev_ctx_t *ctx,
     goto exit;
   }
 
-  if (val != ISM6HG256X_HG_XL_ODR_OFF && ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
-      ctrl1.op_mode_xl != ISM6HG256X_XL_HIGH_PERFORMANCE_MD &&
-      ctrl1.op_mode_xl != ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD)
+  if (val != ISM6HG256X_HG_XL_ODR_OFF && ctrl1.odr_xl != (uint8_t)ISM6HG256X_ODR_OFF &&
+      ctrl1.op_mode_xl != (uint8_t)ISM6HG256X_XL_HIGH_PERFORMANCE_MD &&
+      ctrl1.op_mode_xl != (uint8_t)ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD)
   {
     ret = -1;
     goto exit;
   }
 
   // if xl or gy are ON in odr triggered mode, high-g xl cannot be turned on
-  if ((ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
-       ctrl1.op_mode_xl == ISM6HG256X_XL_ODR_TRIGGERED_MD) ||
-      (ctrl2.odr_g != ISM6HG256X_ODR_OFF &&
-       ctrl2.op_mode_g == ISM6HG256X_GY_ODR_TRIGGERED_MD))
+  if ((ctrl1.odr_xl != (uint8_t)ISM6HG256X_ODR_OFF &&
+       ctrl1.op_mode_xl == (uint8_t)ISM6HG256X_XL_ODR_TRIGGERED_MD) ||
+      (ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF &&
+       ctrl2.op_mode_g == (uint8_t)ISM6HG256X_GY_ODR_TRIGGERED_MD))
   {
     ret = -1;
     goto exit;
@@ -6651,6 +6652,17 @@ exit:
  *
  * Released under BSD-3-Clause License
  */
+
+#ifndef NPY_HALF_GENERATE_OVERFLOW
+#define NPY_HALF_GENERATE_OVERFLOW  0 /* do not trigger FP overflow */
+#endif
+#ifndef NPY_HALF_GENERATE_UNDERFLOW
+#define NPY_HALF_GENERATE_UNDERFLOW 0 /* do not trigger FP underflow */
+#endif
+#ifndef NPY_HALF_ROUND_TIES_TO_EVEN
+#define NPY_HALF_ROUND_TIES_TO_EVEN 1
+#endif
+
 typedef union
 {
   float_t f;
@@ -6807,15 +6819,18 @@ static uint32_t npy_halfbits_to_floatbits(uint16_t h)
 {
   uint16_t h_exp = (h & 0x7c00u);
   uint32_t f_sgn = ((uint32_t)h & 0x8000u) << 16;
+  uint32_t result = 0u;
+
   switch (h_exp)
   {
     case 0x0000u:   // 0 or subnormal
     {
-      uint16_t h_sig = (h & 0x03ffu);
+      uint16_t h_sig = (uint16_t)(h & 0x03ffu);
       // Signed zero
       if (h_sig == 0)
       {
-        return f_sgn;
+        result = f_sgn;
+        break;
       }
       // Subnormal
       h_sig <<= 1;
@@ -6825,16 +6840,21 @@ static uint32_t npy_halfbits_to_floatbits(uint16_t h)
         h_exp++;
       }
       uint32_t f_exp = ((uint32_t)(127 - 15 - h_exp)) << 23;
-      uint32_t f_sig = ((uint32_t)(h_sig & 0x03ffu)) << 13;
-      return f_sgn + f_exp + f_sig;
+      uint32_t f_sig = ((uint32_t)h_sig & 0x03ffu) << 13;
+      result = f_sgn + f_exp + f_sig;
+      break;
     }
     case 0x7c00u: // inf or NaN
       // All-ones exponent and a copy of the significand
-      return f_sgn + 0x7f800000u + (((uint32_t)(h & 0x03ffu)) << 13);
+      result = f_sgn + 0x7f800000u + (((uint32_t)h & 0x03ffu) << 13);
+      break;
     default: // normalized
       // Just need to adjust the exponent and shift
-      return f_sgn + (((uint32_t)(h & 0x7fffu) + 0x1c000u) << 13);
+      result = f_sgn + ((((uint32_t)h & 0x7fffu) + 0x1c000u) << 13);
+      break;
   }
+
+  return result;
 }
 
 static float_t npy_half_to_float(uint16_t h)
