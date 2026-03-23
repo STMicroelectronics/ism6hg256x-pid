@@ -3461,12 +3461,9 @@ int32_t ism6hg256x_ois_eis_angular_rate_raw_get(const stmdev_ctx_t *ctx, int16_t
     return ret;
   }
 
-  val[0] = (int16_t)buff[1];
-  val[0] = (*val * 256) + (int16_t)buff[0];
-  val[1] = (int16_t)buff[3];
-  val[1] = (*val * 256) + (int16_t)buff[2];
-  val[2] = (int16_t)buff[5];
-  val[2] = (*val * 256) + (int16_t)buff[4];
+  val[0] = (int16_t)((uint16_t)buff[1] << 8 | (uint16_t)buff[0]);
+  val[1] = (int16_t)((uint16_t)buff[3] << 8 | (uint16_t)buff[2]);
+  val[2] = (int16_t)((uint16_t)buff[5] << 8 | (uint16_t)buff[4]);
 
   return ret;
 }
@@ -3598,14 +3595,10 @@ int32_t ism6hg256x_sflp_quaternion_raw_get(const stmdev_ctx_t *ctx, uint16_t *va
     return ret;
   }
 
-  val[0] = (uint16_t)buff[1];
-  val[0] = (val[0] * 256) + (uint16_t)buff[0];
-  val[1] = (uint16_t)buff[3];
-  val[1] = (val[1] * 256) + (uint16_t)buff[2];
-  val[2] = (uint16_t)buff[5];
-  val[2] = (val[2] * 256) + (uint16_t)buff[4];
-  val[3] = (uint16_t)buff[7];
-  val[3] = (val[3] * 256) + (uint16_t)buff[6];
+  val[0] = (uint16_t)(((uint16_t)buff[1] << 8) | (uint16_t)buff[0]);
+  val[1] = (uint16_t)(((uint16_t)buff[3] << 8) | (uint16_t)buff[2]);
+  val[2] = (uint16_t)(((uint16_t)buff[5] << 8) | (uint16_t)buff[4]);
+  val[3] = (uint16_t)(((uint16_t)buff[7] << 8) | (uint16_t)buff[6]);
 
   return ret;
 }
@@ -3792,7 +3785,7 @@ int32_t ism6hg256x_ln_pg_write(const stmdev_ctx_t *ctx, uint16_t address,
     goto exit;
   }
 
-  for (i = 0; ((i < len) && (ret == 0)); i++)
+  for (i = 0; i < len; i++)
   {
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_PAGE_VALUE, &buf[i], 1);
     if (ret != 0)
@@ -3803,7 +3796,7 @@ int32_t ism6hg256x_ln_pg_write(const stmdev_ctx_t *ctx, uint16_t address,
     lsb++;
 
     /* Check if page wrap */
-    if (((lsb & 0xFFU) == 0x00U) && (ret == 0))
+    if ((lsb & 0xFFU) == 0x00U)
     {
       msb++;
       ret += ism6hg256x_read_reg(ctx, ISM6HG256X_PAGE_SEL, (uint8_t *)&page_sel, 1);
@@ -3904,7 +3897,7 @@ int32_t ism6hg256x_ln_pg_read(const stmdev_ctx_t *ctx, uint16_t address, uint8_t
     goto exit;
   }
 
-  for (i = 0; ((i < len) && (ret == 0)); i++)
+  for (i = 0; i < len; i++)
   {
     ret += ism6hg256x_read_reg(ctx, ISM6HG256X_PAGE_VALUE, &buf[i], 1);
     if (ret != 0)
@@ -3915,7 +3908,7 @@ int32_t ism6hg256x_ln_pg_read(const stmdev_ctx_t *ctx, uint16_t address, uint8_t
     lsb++;
 
     /* Check if page wrap */
-    if (((lsb & 0xFFU) == 0x00U) && (ret == 0))
+    if ((lsb & 0xFFU) == 0x00U)
     {
       msb++;
       ret += ism6hg256x_read_reg(ctx, ISM6HG256X_PAGE_SEL, (uint8_t *)&page_sel, 1);
@@ -4070,7 +4063,7 @@ int32_t ism6hg256x_eis_gy_full_scale_set(const stmdev_ctx_t *ctx,
   ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
 
   // restore previous odr set
-  if (prev_ctrl2.odr_g != ISM6HG256X_ODR_OFF)
+  if (prev_ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF)
   {
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&prev_ctrl2, 1);
   }
@@ -4177,21 +4170,18 @@ int32_t ism6hg256x_gy_eis_data_rate_set(const stmdev_ctx_t *ctx,
 
   // if xl or gy are ON in odr triggered mode, eis cannot be turned on
   if (val != ISM6HG256X_EIS_ODR_OFF &&
-      ((ctrl1.odr_xl != ISM6HG256X_ODR_OFF &&
-        ctrl1.op_mode_xl == ISM6HG256X_XL_ODR_TRIGGERED_MD) ||
-       (ctrl2.odr_g != ISM6HG256X_ODR_OFF &&
-        ctrl2.op_mode_g == ISM6HG256X_GY_ODR_TRIGGERED_MD))
+      ((ctrl1.odr_xl != (uint8_t)ISM6HG256X_ODR_OFF &&
+        ctrl1.op_mode_xl == (uint8_t)ISM6HG256X_XL_ODR_TRIGGERED_MD) ||
+       (ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF &&
+        ctrl2.op_mode_g == (uint8_t)ISM6HG256X_GY_ODR_TRIGGERED_MD))
      )
   {
     ret = -1;
     goto exit;
   }
 
-  if (ret == 0)
-  {
-    ctrl_eis.odr_g_eis = (uint8_t)val & 0x03U;
-    ret = ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
-  }
+  ctrl_eis.odr_g_eis = (uint8_t)val & 0x03U;
+  ret = ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL_EIS, (uint8_t *)&ctrl_eis, 1);
 
 exit:
   return ret;
@@ -4420,7 +4410,7 @@ int32_t ism6hg256x_fifo_stop_on_wtm_set(const stmdev_ctx_t *ctx, ism6hg256x_fifo
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_FIFO_CTRL2, (uint8_t *)&fifo_ctrl2, 1);
   if (ret == 0)
   {
-    fifo_ctrl2.stop_on_wtm = (val == ISM6HG256X_FIFO_EV_WTM) ? 1 : 0;
+    fifo_ctrl2.stop_on_wtm = (val == ISM6HG256X_FIFO_EV_WTM) ? 1U : 0U;
     ret = ism6hg256x_write_reg(ctx, ISM6HG256X_FIFO_CTRL2, (uint8_t *)&fifo_ctrl2, 1);
   }
 
@@ -4439,7 +4429,7 @@ int32_t ism6hg256x_fifo_stop_on_wtm_get(const stmdev_ctx_t *ctx, ism6hg256x_fifo
     return ret;
   }
 
-  *val = (fifo_ctrl2.stop_on_wtm == 1) ? ISM6HG256X_FIFO_EV_WTM : ISM6HG256X_FIFO_EV_FULL;
+  *val = (fifo_ctrl2.stop_on_wtm == 1U) ? ISM6HG256X_FIFO_EV_WTM : ISM6HG256X_FIFO_EV_FULL;
 
   return ret;
 }
@@ -5354,7 +5344,7 @@ int32_t ism6hg256x_fifo_sh_batch_target_set(const stmdev_ctx_t *ctx, uint8_t idx
   ism6hg256x_tgt0_config_t tgt_config = {0};
   int32_t ret = 0;
 
-  if (idx > 3)
+  if (idx > 3U)
   {
     return -1;
   }
@@ -5385,7 +5375,7 @@ int32_t ism6hg256x_fifo_sh_batch_target_get(const stmdev_ctx_t *ctx, uint8_t idx
   ism6hg256x_tgt0_config_t tgt_config = {0};
   int32_t ret = 0;
 
-  if (idx > 3)
+  if (idx > 3U)
   {
     return -1;
   }
@@ -5738,9 +5728,9 @@ int32_t ism6hg256x_filt_xl_setup(const stmdev_ctx_t *ctx, ism6hg256x_xl_filter f
   ism6hg256x_ctrl9_t ctrl9 = {0};
 
   if ((filter == ISM6HG256X_XL_FILT_HP && bw == ISM6HG256X_XL_ULTRA_LIGHT) ||
-      (hp_ref_mode_xl == 1 && filter != ISM6HG256X_XL_FILT_HP) ||
+      (hp_ref_mode_xl == 1U && filter != ISM6HG256X_XL_FILT_HP) ||
       // if bw == 0 slope filter is used instead of digital HP filter
-      (filter == ISM6HG256X_XL_FILT_HP_SLOPE && (uint8_t)bw != 0x0))
+      (filter == ISM6HG256X_XL_FILT_HP_SLOPE && (uint8_t)bw != 0x0U))
   {
     ret = -1;
     goto exit;
