@@ -4733,6 +4733,7 @@ int32_t ism6hg256x_device_id_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
 typedef enum
 {
+  ISM6HG256X_ODR_UNCHANGED        = 0xFF, /* Used in xl_setup or gy_setup: change mode only, keep ODR unchanged */
   ISM6HG256X_ODR_OFF              = 0x0,
   ISM6HG256X_ODR_AT_1Hz875        = 0x1,
   ISM6HG256X_ODR_AT_7Hz5          = 0x2,
@@ -4858,6 +4859,7 @@ int32_t ism6hg256x_hg_xl_data_rate_get(const stmdev_ctx_t *ctx,
 
 typedef enum
 {
+  ISM6HG256X_XL_UNCHANGED_MD          = 0xFF, /* Used in xl_setup: change odr only, keep MD unchanged */
   ISM6HG256X_XL_HIGH_PERFORMANCE_MD   = 0x0,
   ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD  = 0x1,
   ISM6HG256X_XL_ODR_TRIGGERED_MD      = 0x3,
@@ -4890,6 +4892,7 @@ int32_t ism6hg256x_xl_mode_get(const stmdev_ctx_t *ctx, ism6hg256x_xl_mode_t *va
 
 typedef enum
 {
+  ISM6HG256X_GY_UNCHANGED_MD          = 0xFF, /* Used in gy_setup: change odr only, keep MD unchanged */
   ISM6HG256X_GY_HIGH_PERFORMANCE_MD   = 0x0,
   ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD  = 0x1,
   ISM6HG256X_GY_ODR_TRIGGERED_MD      = 0x3,
