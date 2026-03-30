@@ -30,7 +30,20 @@ This directory contains the ISM6HG256X component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section7" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section8" checked aria-hidden="true">
+<label for="collapse-section8" aria-hidden="true">V4.2.0 / 30-Mar-2026</label>
+<div>
+
+## Main changes
+
+- Add UNCHANGED enum value in xl_setup and gy_setup APIs
+- Fix some MISRA rules
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section7" aria-hidden="true">
 <label for="collapse-section7" aria-hidden="true">V4.1.2 / 18-Mar-2026</label>
 <div>
 
