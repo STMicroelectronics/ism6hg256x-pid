@@ -50,7 +50,7 @@ int32_t __weak ism6hg256x_write_reg(const stmdev_ctx_t *ctx, uint8_t reg,
   return ret;
 }
 
-static void bytecpy(uint8_t *target, uint8_t *source)
+static void bytecpy(uint8_t *target, const uint8_t *source)
 {
   if ((target != NULL) && (source != NULL))
   {
@@ -204,7 +204,7 @@ int32_t ism6hg256x_xl_offset_mg_set(const stmdev_ctx_t *ctx,
   ism6hg256x_x_ofs_usr_t x_ofs_usr = {0};
   ism6hg256x_ctrl9_t ctrl9 = {0};
   int32_t ret = 0;
-  float_t tmp = 0;
+  float_t tmp = 0.0f;
 
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_Z_OFS_USR, (uint8_t *)&z_ofs_usr, 1);
   ret += ism6hg256x_read_reg(ctx, ISM6HG256X_Y_OFS_USR, (uint8_t *)&y_ofs_usr, 1);
@@ -220,38 +220,38 @@ int32_t ism6hg256x_xl_offset_mg_set(const stmdev_ctx_t *ctx,
       (val.y_mg < (0.0078125f * 127.0f)) && (val.y_mg > (0.0078125f * -127.0f)) &&
       (val.z_mg < (0.0078125f * 127.0f)) && (val.z_mg > (0.0078125f * -127.0f)))
   {
-    ctrl9.usr_off_w = 0;
+    ctrl9.usr_off_w = 0u;
 
     tmp = val.z_mg / 0.0078125f;
-    z_ofs_usr.z_ofs_usr = (uint8_t)tmp;
+    z_ofs_usr.z_ofs_usr = (int8_t)(int32_t)tmp;
 
     tmp = val.y_mg / 0.0078125f;
-    y_ofs_usr.y_ofs_usr = (uint8_t)tmp;
+    y_ofs_usr.y_ofs_usr = (int8_t)(int32_t)tmp;
 
     tmp = val.x_mg / 0.0078125f;
-    x_ofs_usr.x_ofs_usr = (uint8_t)tmp;
+    x_ofs_usr.x_ofs_usr = (int8_t)(int32_t)tmp;
   }
   else if ((val.x_mg < (0.125f * 127.0f)) && (val.x_mg > (0.125f * -127.0f)) &&
            (val.y_mg < (0.125f * 127.0f)) && (val.y_mg > (0.125f * -127.0f)) &&
            (val.z_mg < (0.125f * 127.0f)) && (val.z_mg > (0.125f * -127.0f)))
   {
-    ctrl9.usr_off_w = 1;
+    ctrl9.usr_off_w = 1u;
 
     tmp = val.z_mg / 0.125f;
-    z_ofs_usr.z_ofs_usr = (uint8_t)tmp;
+    z_ofs_usr.z_ofs_usr = (int8_t)(int32_t)tmp;
 
     tmp = val.y_mg / 0.125f;
-    y_ofs_usr.y_ofs_usr = (uint8_t)tmp;
+    y_ofs_usr.y_ofs_usr = (int8_t)(int32_t)tmp;
 
     tmp = val.x_mg / 0.125f;
-    x_ofs_usr.x_ofs_usr = (uint8_t)tmp;
+    x_ofs_usr.x_ofs_usr = (int8_t)(int32_t)tmp;
   }
   else // out of limit
   {
-    ctrl9.usr_off_w = 1;
-    z_ofs_usr.z_ofs_usr = 0xFFU;
-    y_ofs_usr.y_ofs_usr = 0xFFU;
-    x_ofs_usr.x_ofs_usr = 0xFFU;
+    ctrl9.usr_off_w = 1u;
+    z_ofs_usr.z_ofs_usr = 0xFF;
+    y_ofs_usr.y_ofs_usr = 0xFF;
+    x_ofs_usr.x_ofs_usr = 0xFF;
   }
 
   ret = ism6hg256x_write_reg(ctx, ISM6HG256X_Z_OFS_USR, (uint8_t *)&z_ofs_usr, 1);
@@ -306,7 +306,7 @@ int32_t ism6hg256x_hg_xl_offset_mg_set(const stmdev_ctx_t *ctx,
   ism6hg256x_hg_x_ofs_usr_t x_ofs_usr = {0};
   ism6hg256x_ctrl1_xl_hg_t  ctrl1_xl_hg = {0};
   int32_t ret = 0;
-  float_t tmp = 0;
+  float_t tmp = 0.0f;
 
   ret = ism6hg256x_read_reg(ctx, ISM6HG256X_CTRL1_XL_HG, (uint8_t *)&ctrl1_xl_hg, 1);
   if (ret != 0)
@@ -321,20 +321,20 @@ int32_t ism6hg256x_hg_xl_offset_mg_set(const stmdev_ctx_t *ctx,
     ctrl1_xl_hg.hg_usr_off_on_out = 1;
 
     tmp = val.z_mg / 0.25f;
-    z_ofs_usr.xl_hg_z_ofs_usr = (uint8_t)tmp;
+    z_ofs_usr.xl_hg_z_ofs_usr = (int8_t)tmp;
 
     tmp = val.y_mg / 0.25f;
-    y_ofs_usr.xl_hg_y_ofs_usr = (uint8_t)tmp;
+    y_ofs_usr.xl_hg_y_ofs_usr = (int8_t)tmp;
 
     tmp = val.x_mg / 0.25f;
-    x_ofs_usr.xl_hg_x_ofs_usr = (uint8_t)tmp;
+    x_ofs_usr.xl_hg_x_ofs_usr = (int8_t)tmp;
   }
   else // out of limit
   {
-    ctrl1_xl_hg.hg_usr_off_on_out = 0;
-    z_ofs_usr.xl_hg_z_ofs_usr = 0xFFU;
-    y_ofs_usr.xl_hg_y_ofs_usr = 0xFFU;
-    x_ofs_usr.xl_hg_x_ofs_usr = 0xFFU;
+    ctrl1_xl_hg.hg_usr_off_on_out = 0u;
+    z_ofs_usr.xl_hg_z_ofs_usr = 0xFF;
+    y_ofs_usr.xl_hg_y_ofs_usr = 0xFF;
+    x_ofs_usr.xl_hg_x_ofs_usr = 0xFF;
   }
 
   ret = ism6hg256x_write_reg(ctx, ISM6HG256X_XL_HG_Z_OFS_USR, (uint8_t *)&z_ofs_usr, 1);
@@ -386,12 +386,12 @@ int32_t ism6hg256x_reboot(const stmdev_ctx_t *ctx)
   ism6hg256x_ctrl3_t ctrl3 = {0};
   int32_t ret = 0;
   /* configuration to restore after reboot */
-  ism6hg256x_data_rate_t xl;
-  ism6hg256x_data_rate_t gy;
-  ism6hg256x_hg_xl_data_rate_t hg_xl;
-  ism6hg256x_xl_mode_t xlm;
-  ism6hg256x_gy_mode_t gym;
-  uint8_t reg_out_en;
+  ism6hg256x_data_rate_t xl = ISM6HG256X_ODR_OFF;
+  ism6hg256x_data_rate_t gy = ISM6HG256X_ODR_OFF;
+  ism6hg256x_hg_xl_data_rate_t hg_xl = ISM6HG256X_HG_XL_ODR_OFF;
+  ism6hg256x_xl_mode_t xlm = ISM6HG256X_XL_UNCHANGED_MD;
+  ism6hg256x_gy_mode_t gym = ISM6HG256X_GY_UNCHANGED_MD;
+  uint8_t reg_out_en = 0u;
 
   if (ctx->mdelay == NULL)
   {
@@ -482,7 +482,7 @@ exit:
 int32_t ism6hg256x_sw_reset(const stmdev_ctx_t *ctx)
 {
   ism6hg256x_ctrl3_t ctrl3 = {0};
-  uint8_t retry = 0;
+  uint8_t retry = 0u;
   int32_t ret = 0;
 
   if (ctx->mdelay == NULL)
@@ -514,9 +514,10 @@ int32_t ism6hg256x_sw_reset(const stmdev_ctx_t *ctx)
     }
 
     ctx->mdelay(1);
-  } while (ctrl3.sw_reset == 1 && retry++ < 3);
+    retry++;
+  } while ((ctrl3.sw_reset == 1u) && (retry < 3u));
 
-  return (ctrl3.sw_reset == 0) ? 0 : -1;
+  return (ctrl3.sw_reset == 0u) ? 0 : -1;
 
 exit:
   return ret;
@@ -638,7 +639,7 @@ int32_t ism6hg256x_xl_setup(
   // if odr_xl bits has 4th bit enabled, low-power modes are not allowed
   else if (
     // odr >= 480 and low-power and normal mode
-    ((uint8_t)xl_odr & 0x8) != 0 && ((uint8_t)xl_mode & 0x4) != 0 &&
+    ((uint8_t)xl_odr & 0x8) != 0u && ((uint8_t)xl_mode & 0x4) != 0u &&
     (xl_mode != ISM6HG256X_XL_NORMAL_MD || // normal mode is not allowed for some data rates
      xl_odr == ISM6HG256X_ODR_AT_3840Hz ||
      xl_odr == ISM6HG256X_ODR_AT_7680Hz))
@@ -658,8 +659,8 @@ int32_t ism6hg256x_xl_setup(
   }
 
   // if odr is choosed as high-accuracy value, mode should also be set in HAODR mode
-  if ((xl_ha != 0 && xl_mode != ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD) ||
-      (xl_ha == 0 && xl_mode == ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD))
+  if ((xl_ha != 0u && xl_mode != ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD) ||
+      (xl_ha == 0u && xl_mode == ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD))
   {
     ret = -1;
     goto exit;
@@ -678,17 +679,17 @@ int32_t ism6hg256x_xl_setup(
 
   // cross-checking haodr mode
   both_on = ctrl1.odr_xl != (uint8_t)ISM6HG256X_ODR_OFF &&
-            ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF ? 1 : 0;
+            ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF ? 1u : 0u;
 
   // if both on, then haodr_sel is a shared bit. Could be changed through haodr_set API
-  if (both_on == 1 && (xl_ha != haodr.haodr_sel))
+  if (both_on == 1u && (xl_ha != haodr.haodr_sel))
   {
     ret = -1;
     goto exit;
   }
 
   // if odr is choosed as an high-accuracy value, mode should be set in high-accuracy
-  if ((xl_ha != 0 && xl_mode != ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD))
+  if ((xl_ha != 0u && xl_mode != ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD))
   {
     ret = -1;
     goto exit;
@@ -755,7 +756,7 @@ int32_t ism6hg256x_gy_setup(
 
   // Table 13 of AN6353
   // 7.5Hz with HAODR mode enable, is already handled by the enum selection
-  if (((uint8_t)gy_odr & 0x8) != 0 && gy_mode == ISM6HG256X_GY_LOW_POWER_MD)
+  if (((uint8_t)gy_odr & 0x8) != 0u && gy_mode == ISM6HG256X_GY_LOW_POWER_MD)
   {
     ret = -1;
     goto exit;
@@ -771,8 +772,8 @@ int32_t ism6hg256x_gy_setup(
   }
 
   // if odr is choosed as high-accuracy value, mode should also be set in HAODR mode
-  if ((gy_ha != 0 && gy_mode != ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD) ||
-      (gy_ha == 0 && gy_mode == ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD))
+  if ((gy_ha != 0u && gy_mode != ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD) ||
+      (gy_ha == 0u && gy_mode == ISM6HG256X_GY_HIGH_ACCURACY_ODR_MD))
   {
     ret = -1;
     goto exit;
@@ -791,10 +792,10 @@ int32_t ism6hg256x_gy_setup(
 
   // cross-checking haodr mode
   both_on = ctrl1.odr_xl != (uint8_t)ISM6HG256X_ODR_OFF &&
-            ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF ? 1 : 0;
+            ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF ? 1u : 0u;
 
   // if both on, then haodr_sel is a shared bit
-  if (both_on == 1 && (gy_ha != haodr.haodr_sel))
+  if (both_on == 1u && (gy_ha != haodr.haodr_sel))
   {
     ret = -1;
     goto exit;
@@ -836,7 +837,7 @@ int32_t ism6hg256x_haodr_set(
   ism6hg256x_ctrl2_t ctrl2 = {0};
   ism6hg256x_haodr_cfg_t haodr = {0};
   ism6hg256x_ctrl1_xl_hg_t ctrl1_xl_hg = {0};
-  ism6hg256x_xl_mode_t prev_mode = {0};
+  ism6hg256x_xl_mode_t prev_mode = ISM6HG256X_XL_UNCHANGED_MD;
   ism6hg256x_ctrl1_xl_hg_t ctrl1_xl_hg_prev = {0};
   ism6hg256x_ctrl_eis_t ctrl_eis_prev = {0};
   ism6hg256x_ctrl_eis_t ctrl_eis = {0};
@@ -852,7 +853,7 @@ int32_t ism6hg256x_haodr_set(
     goto exit;
   }
 
-  if (both_on == 1 && (xl_ha != gy_ha))
+  if (both_on == 1u && (xl_ha != gy_ha))
   {
     ret = -1;
     goto exit;
@@ -877,7 +878,7 @@ int32_t ism6hg256x_haodr_set(
   ctrl1.odr_xl = (uint8_t)ISM6HG256X_ODR_OFF;
   ctrl2.odr_g = (uint8_t)ISM6HG256X_ODR_OFF;
   ctrl1_xl_hg.odr_xl_hg = (uint8_t)ISM6HG256X_HG_XL_ODR_OFF;
-  ctrl1_xl_hg.xl_hg_regout_en = 0;
+  ctrl1_xl_hg.xl_hg_regout_en = 0u;
   ctrl_eis.odr_g_eis = (uint8_t)ISM6HG256X_EIS_ODR_OFF;
   ret = ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL1, (uint8_t *)&ctrl1, 1);
   ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
@@ -996,7 +997,6 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
     case (uint8_t)ISM6HG256X_ODR_AT_15Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_15Hz;
           break;
@@ -1009,13 +1009,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_13Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_15Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_30Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_30Hz;
           break;
@@ -1028,13 +1030,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_26Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_30Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_60Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_60Hz;
           break;
@@ -1047,13 +1051,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_52Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_60Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_120Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_120Hz;
           break;
@@ -1066,13 +1072,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_104Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_120Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_240Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_240Hz;
           break;
@@ -1085,13 +1093,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_208Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_240Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_480Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_480Hz;
           break;
@@ -1104,13 +1114,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_417Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_480Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_960Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_960Hz;
           break;
@@ -1123,13 +1135,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_833Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_960Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_1920Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_1920Hz;
           break;
@@ -1142,13 +1156,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_1667Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_1920Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_3840Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_3840Hz;
           break;
@@ -1161,13 +1177,15 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_3333Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_3840Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_7680Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_7680Hz;
           break;
@@ -1179,6 +1197,9 @@ int32_t ism6hg256x_xl_data_rate_get(const stmdev_ctx_t *ctx,
           break;
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_6667Hz;
+          break;
+        default:
+          *val = ISM6HG256X_ODR_AT_7680Hz;
           break;
       }
       break;
@@ -1429,7 +1450,6 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
     case (uint8_t)ISM6HG256X_ODR_AT_15Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_15Hz;
           break;
@@ -1442,13 +1462,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_13Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_15Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_30Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_30Hz;
           break;
@@ -1461,13 +1483,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_26Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_30Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_60Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_60Hz;
           break;
@@ -1480,13 +1504,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_52Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_60Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_120Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_120Hz;
           break;
@@ -1499,13 +1525,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_104Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_120Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_240Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_240Hz;
           break;
@@ -1518,13 +1546,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_208Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_240Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_480Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_480Hz;
           break;
@@ -1537,13 +1567,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_417Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_480Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_960Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_960Hz;
           break;
@@ -1556,13 +1588,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_833Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_960Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_1920Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_1920Hz;
           break;
@@ -1575,13 +1609,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_1667Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_1920Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_3840Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_3840Hz;
           break;
@@ -1594,13 +1630,15 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_3333Hz;
           break;
+        default:
+          *val = ISM6HG256X_ODR_AT_3840Hz;
+          break;
       }
       break;
 
     case (uint8_t)ISM6HG256X_ODR_AT_7680Hz:
       switch (sel)
       {
-        default:
         case 0:
           *val = ISM6HG256X_ODR_AT_7680Hz;
           break;
@@ -1612,6 +1650,9 @@ int32_t ism6hg256x_gy_data_rate_get(const stmdev_ctx_t *ctx,
           break;
         case 3:
           *val = ISM6HG256X_ODR_HA03_AT_6667Hz;
+          break;
+        default:
+          *val = ISM6HG256X_ODR_AT_7680Hz;
           break;
       }
       break;
@@ -3501,9 +3542,12 @@ int32_t ism6hg256x_ois_eis_angular_rate_raw_get(const stmdev_ctx_t *ctx, int16_t
     return ret;
   }
 
-  val[0] = (int16_t)((uint16_t)buff[1] << 8 | (uint16_t)buff[0]);
-  val[1] = (int16_t)((uint16_t)buff[3] << 8 | (uint16_t)buff[2]);
-  val[2] = (int16_t)((uint16_t)buff[5] << 8 | (uint16_t)buff[4]);
+  val[0] = ((int16_t)buff[1]) << 8;
+  val[0] |= (int16_t)buff[0];
+  val[1] = ((int16_t)buff[3]) << 8;
+  val[1] |= (int16_t)buff[2];
+  val[2] = ((int16_t)buff[5]) << 8;
+  val[2] |= (int16_t)buff[4];
 
   return ret;
 }
@@ -4093,9 +4137,9 @@ int32_t ism6hg256x_eis_gy_full_scale_set(const stmdev_ctx_t *ctx,
 
   // For the correct operation of the device, the user must set a
   // configuration from 001 to 101 when the gyroscope is in power-down mode.
-  if (ctrl2.odr_g != ISM6HG256X_ODR_OFF)
+  if (ctrl2.odr_g != (uint8_t)ISM6HG256X_ODR_OFF)
   {
-    ctrl2.odr_g = ISM6HG256X_ODR_OFF;
+    ctrl2.odr_g = (uint8_t)ISM6HG256X_ODR_OFF;
     ret += ism6hg256x_write_reg(ctx, ISM6HG256X_CTRL2, (uint8_t *)&ctrl2, 1);
   }
 
@@ -6693,12 +6737,6 @@ exit:
 #define NPY_HALF_ROUND_TIES_TO_EVEN 1
 #endif
 
-typedef union
-{
-  float_t f;
-  uint32_t fbits;
-} hf_conv_t;
-
 static uint16_t npy_floatbits_to_halfbits(uint32_t f)
 {
   uint32_t f_exp = 0, f_sig = 0;
@@ -6839,10 +6877,11 @@ static uint16_t npy_floatbits_to_halfbits(uint32_t f)
 
 static uint16_t npy_float_to_half(float_t f)
 {
-  hf_conv_t conv;
+  uint32_t bits;
 
-  conv.f = f;
-  return npy_floatbits_to_halfbits(conv.fbits);
+  (void)memcpy(&bits, &f, sizeof(bits));
+
+  return npy_floatbits_to_halfbits(bits);
 }
 
 static uint32_t npy_halfbits_to_floatbits(uint16_t h)
@@ -6857,19 +6896,19 @@ static uint32_t npy_halfbits_to_floatbits(uint16_t h)
     {
       uint16_t h_sig = (uint16_t)(h & 0x03ffu);
       // Signed zero
-      if (h_sig == 0)
+      if (h_sig == 0u)
       {
         result = f_sgn;
         break;
       }
       // Subnormal
       h_sig <<= 1;
-      while ((h_sig & 0x0400u) == 0)
+      while ((h_sig & 0x0400u) == 0u)
       {
         h_sig <<= 1;
         h_exp++;
       }
-      uint32_t f_exp = ((uint32_t)(127 - 15 - h_exp)) << 23;
+      uint32_t f_exp = ((uint32_t)(127u - 15u - h_exp)) << 23;
       uint32_t f_sig = ((uint32_t)h_sig & 0x03ffu) << 13;
       result = f_sgn + f_exp + f_sig;
       break;
@@ -6889,18 +6928,20 @@ static uint32_t npy_halfbits_to_floatbits(uint16_t h)
 
 static float_t npy_half_to_float(uint16_t h)
 {
-  hf_conv_t conv;
+  uint32_t bits = 0;
 
-  conv.fbits = npy_halfbits_to_floatbits(h);
+  float f = npy_halfbits_to_floatbits(h);
 
-  return conv.f;
+  (void)memcpy(&bits, &f, sizeof(bits));
+
+  return bits;
 }
 
 
 int32_t ism6hg256x_sflp_game_gbias_set(const stmdev_ctx_t *ctx,
                                        const ism6hg256x_sflp_gbias_t *val)
 {
-  ism6hg256x_sflp_data_rate_t sflp_odr = {0};
+  ism6hg256x_sflp_data_rate_t sflp_odr = ISM6HG256X_SFLP_15Hz;
   uint16_t gbias_hf[3] = {0};
   float_t k = 0.005f;
   int32_t ret = 0;
@@ -7608,6 +7649,9 @@ int32_t ism6hg256x_mlc_set(const stmdev_ctx_t *ctx, ism6hg256x_mlc_mode_t val)
       emb_en_b.mlc_en = 0;
       break;
     default:
+      // default used: MLC_OFF
+      emb_en_a.mlc_before_fsm_en = 0;
+      emb_en_b.mlc_en = 0;
       break;
   }
 
