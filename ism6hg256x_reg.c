@@ -688,13 +688,6 @@ int32_t ism6hg256x_xl_setup(
     goto exit;
   }
 
-  // if odr is choosed as an high-accuracy value, mode should be set in high-accuracy
-  if ((xl_ha != 0u && xl_mode != ISM6HG256X_XL_HIGH_ACCURACY_ODR_MD))
-  {
-    ret = -1;
-    goto exit;
-  }
-
   // Switching (enable/disable) HAODR mode require that all sensors must be in power-down mode.
   // Note: if both sensors are ON, ism6hg256x_haodr_set function must be used.
   if (haodr.haodr_sel != xl_ha &&
