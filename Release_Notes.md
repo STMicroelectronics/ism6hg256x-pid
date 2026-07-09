@@ -30,7 +30,21 @@ This directory contains the ISM6HG256X component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section9" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section10" checked aria-hidden="true">
+<label for="collapse-section10" aria-hidden="true">V4.4.0 / 09-Jul-2026</label>
+<div>
+
+## Main changes
+
+- Fix wrong mask for tgt_add (7-bit i2c addr)
+- fix wrong behaviour of xl/gy setup APIs
+- Fix [-Werror=conversion] warning in compilation
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section9" aria-hidden="true">
 <label for="collapse-section9" aria-hidden="true">V4.3.0 / 22-Apr-2026</label>
 <div>
 
