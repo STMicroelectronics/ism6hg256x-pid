@@ -31,7 +31,14 @@ extern "C" {
 #include <math.h>
 #include <string.h>
 
-/** @addtogroup ISM6HG256X
+/**
+  * @defgroup  ISM6HG256X_sensor ISM6HG256X Sensor driver definitions
+  * @{
+  *
+  */
+
+/** @defgroup ISM6HG256X_regs ISM6HG256X Register section
+  * @brief       This section provides sensor's register related definitions
   * @{
   *
   */
@@ -67,11 +74,6 @@ extern "C" {
   *
   */
 
-/** @defgroup st_common_types STMicroelectronics Sensors Common Types
-  * @{
-  *
-  */
-
 #ifndef MEMS_SHARED_TYPES
 #define MEMS_SHARED_TYPES
 
@@ -101,7 +103,7 @@ typedef struct
 #define PROPERTY_DISABLE                (0U)
 #define PROPERTY_ENABLE                 (1U)
 
-/** @addtogroup  Interfaces_Functions
+/** @defgroup  Interfaces_Functions Generic Read/Write routines
   * @brief       This section provide a set of functions used to read and
   *              write a generic register of the device.
   *              MANDATORY: return 0 -> no Error.
@@ -144,39 +146,7 @@ typedef struct
 
 #endif /* MEMS_SHARED_TYPES */
 
-#ifndef MEMS_UCF_SHARED_TYPES
-#define MEMS_UCF_SHARED_TYPES
-
-/** @defgroup    Generic_structs Generic address-data structure definition
-  * @brief       This structure is useful to load a predefined configuration
-  *              of a sensor.
-  *              You can create a sensor configuration by your own or using
-  *              Unico / Unicleo tools available on STMicroelectronics
-  *              web site.
-  *
-  * @{
-  *
-  */
-
-typedef struct
-{
-  uint8_t address;
-  uint8_t data;
-} ucf_line_t;
-
-/**
-  * @}
-  *
-  */
-
-#endif /* MEMS_UCF_SHARED_TYPES */
-
-/**
-  * @}
-  *
-  */
-
-/** @defgroup ISM6HG256X_Infos Infos
+/** @defgroup ISM6HG256X_Infos I2C Address and Device ID
   * @{
   *
   */
@@ -193,7 +163,8 @@ typedef struct
   *
   */
 
-/** @defgroup bitfields_page_main Bitfields Page Main
+/** @defgroup bitfields_page_main Main Page register's bitfield
+  * @brief       Register definitions in Sensor Main Page
   * @{
   *
   */
@@ -1806,7 +1777,8 @@ typedef struct
   *
   */
 
-/** @defgroup bitfields_page_if2 Bitfields Page if2
+/** @defgroup bitfields_page_if2 If2 Page register's bitfield
+  * @brief       Register definitions in Sensor If2 Page
   * @{
   *
   */
@@ -2066,7 +2038,8 @@ typedef struct
   *
   */
 
-/** @defgroup bitfields_page_embedded Bitfields Page Embedded
+/** @defgroup bitfields_page_embedded Embedded Page register's bitfield
+  * @brief       Register definitions in Sensor Embedded Page
   * @{
   *
   */
@@ -3154,7 +3127,8 @@ typedef struct
   *
   */
 
-/** @defgroup bitfields_page_pg0_emb_adv Bitfields Page pg0_emb_adv
+/** @defgroup bitfields_page_pg0_emb_adv pg0_emb_adv register's bitfield
+  * @brief       Register definitions in Sensor Embedded Advanced Page 0
   * @{
   *
   */
@@ -3393,7 +3367,8 @@ typedef struct
   *
   */
 
-/** @defgroup bitfields_page_pg1_emb_adv Bitfields Page pg1_emb_adv
+/** @defgroup bitfields_page_pg1_emb_adv pg1_emb_adv register's bitfield
+  * @brief       Register definitions in Sensor Embedded Advanced Page 1
   * @{
   *
   */
@@ -3535,7 +3510,13 @@ typedef struct
 #endif /* DRV_BYTE_ORDER */
 } ism6hg256x_mlc_ext_sensitivity_h_t;
 
-/** @defgroup bitfields_page_pg2_emb_adv Bitfields Page pg2_emb_adv
+/**
+  * @}
+  *
+  */
+
+/** @defgroup bitfields_page_pg2_emb_adv pg2_emb_adv register's bitfield
+  * @brief       Register definitions in Sensor Embedded Advanced Page 2
   * @{
   *
   */
@@ -3610,7 +3591,8 @@ typedef struct
   *
   */
 
-/** @defgroup bitfields_page_sensor_hub Bitfields Page sensor_hub
+/** @defgroup bitfields_page_sensor_hub Page sensor_hub register's bitfield
+  * @brief       Register definitions in Sensor Hub Page
   * @{
   *
   */
@@ -4001,307 +3983,6 @@ typedef struct
   */
 
 /**
-  * @defgroup ISM6HG256X_Register_Union Register Union
-  * @brief    This union group all the registers having a bit-field
-  *           description.
-  *           This union is useful but it's not needed by the driver.
-  *
-  *           REMOVING this union you are compliant with:
-  *           MISRA-C 2012 [Rule 19.2] -> " Union are not allowed "
-  *
-  * @{
-  *
-  */
-typedef union
-{
-  /* master page registers */
-  ism6hg256x_func_cfg_access_t          func_cfg_access;
-  ism6hg256x_pin_ctrl_t                 pin_ctrl;
-  ism6hg256x_if_cfg_t                   if_cfg;
-  ism6hg256x_odr_trig_cfg_t             odr_trig_cfg;
-  ism6hg256x_fifo_ctrl1_t               fifo_ctrl1;
-  ism6hg256x_fifo_ctrl2_t               fifo_ctrl2;
-  ism6hg256x_fifo_ctrl3_t               fifo_ctrl3;
-  ism6hg256x_fifo_ctrl4_t               fifo_ctrl4;
-  ism6hg256x_counter_bdr_reg1_t         counter_bdr_reg1;
-  ism6hg256x_counter_bdr_reg2_t         counter_bdr_reg2;
-  ism6hg256x_int1_ctrl_t                int1_ctrl;
-  ism6hg256x_int2_ctrl_t                int2_ctrl;
-  ism6hg256x_who_am_i_t                 who_am_i;
-  ism6hg256x_ctrl1_t                    ctrl1;
-  ism6hg256x_ctrl2_t                    ctrl2;
-  ism6hg256x_ctrl3_t                    ctrl3;
-  ism6hg256x_ctrl4_t                    ctrl4;
-  ism6hg256x_ctrl5_t                    ctrl5;
-  ism6hg256x_ctrl6_t                    ctrl6;
-  ism6hg256x_ctrl7_t                    ctrl7;
-  ism6hg256x_ctrl8_t                    ctrl8;
-  ism6hg256x_ctrl9_t                    ctrl9;
-  ism6hg256x_ctrl10_t                   ctrl10;
-  ism6hg256x_ctrl_status_t              ctrl_status;
-  ism6hg256x_fifo_status1_t             fifo_status1;
-  ism6hg256x_fifo_status2_t             fifo_status2;
-  ism6hg256x_all_int_src_t              all_int_src;
-  ism6hg256x_status_reg_t               status_reg;
-  ism6hg256x_out_temp_l_t               out_temp_l;
-  ism6hg256x_out_temp_h_t               out_temp_h;
-  ism6hg256x_outx_l_g_t                 outx_l_g;
-  ism6hg256x_outx_h_g_t                 outx_h_g;
-  ism6hg256x_outy_l_g_t                 outy_l_g;
-  ism6hg256x_outy_h_g_t                 outy_h_g;
-  ism6hg256x_outz_l_g_t                 outz_l_g;
-  ism6hg256x_outz_h_g_t                 outz_h_g;
-  ism6hg256x_outx_l_a_t                 outx_l_a;
-  ism6hg256x_outx_h_a_t                 outx_h_a;
-  ism6hg256x_outy_l_a_t                 outy_l_a;
-  ism6hg256x_outy_h_a_t                 outy_h_a;
-  ism6hg256x_outz_l_a_t                 outz_l_a;
-  ism6hg256x_outz_h_a_t                 outz_h_a;
-  ism6hg256x_ui_outx_l_g_ois_eis_t      ui_outx_l_g_ois_eis;
-  ism6hg256x_ui_outx_h_g_ois_eis_t      ui_outx_h_g_ois_eis;
-  ism6hg256x_ui_outy_l_g_ois_eis_t      ui_outy_l_g_ois_eis;
-  ism6hg256x_ui_outy_h_g_ois_eis_t      ui_outy_h_g_ois_eis;
-  ism6hg256x_ui_outz_l_g_ois_eis_t      ui_outz_l_g_ois_eis;
-  ism6hg256x_ui_outz_h_g_ois_eis_t      ui_outz_h_g_ois_eis;
-  ism6hg256x_ui_outx_l_a_ois_hg_t       ui_outx_l_a_ois_hg;
-  ism6hg256x_ui_outx_h_a_ois_hg_t       ui_outx_h_a_ois_hg;
-  ism6hg256x_ui_outy_l_a_ois_hg_t       ui_outy_l_a_ois_hg;
-  ism6hg256x_ui_outy_h_a_ois_hg_t       ui_outy_h_a_ois_hg;
-  ism6hg256x_ui_outz_l_a_ois_hg_t       ui_outz_l_a_ois_hg;
-  ism6hg256x_ui_outz_h_a_ois_hg_t       ui_outz_h_a_ois_hg;
-  ism6hg256x_timestamp0_t               timestamp0;
-  ism6hg256x_timestamp1_t               timestamp1;
-  ism6hg256x_timestamp2_t               timestamp2;
-  ism6hg256x_timestamp3_t               timestamp3;
-  ism6hg256x_ui_status_reg_ois_t        ui_status_reg_ois;
-  ism6hg256x_wake_up_src_t              wake_up_src;
-  ism6hg256x_tap_src_t                  tap_src;
-  ism6hg256x_d6d_src_t                  d6d_src;
-  ism6hg256x_status_controller_mainpage_t   status_controller_mainpage;
-  ism6hg256x_emb_func_status_mainpage_t emb_func_status_mainpage;
-  ism6hg256x_fsm_status_mainpage_t      fsm_status_mainpage;
-  ism6hg256x_mlc_status_mainpage_t      mlc_status_mainpage;
-  ism6hg256x_hg_wake_up_src_t           hg_wake_up_src;
-  ism6hg256x_ctrl2_xl_hg_t              ctrl2_xl_hg;
-  ism6hg256x_ctrl1_xl_hg_t              ctrl1_xl_hg;
-  ism6hg256x_internal_freq_t            internal_freq;
-  ism6hg256x_functions_enable_t         functions_enable;
-  ism6hg256x_inactivity_dur_t           inactivity_dur;
-  ism6hg256x_inactivity_ths_t           inactivity_ths;
-  ism6hg256x_tap_cfg0_t                 tap_cfg0;
-  ism6hg256x_tap_cfg1_t                 tap_cfg1;
-  ism6hg256x_tap_cfg2_t                 tap_cfg2;
-  ism6hg256x_tap_ths_6d_t               tap_ths_6d;
-  ism6hg256x_tap_dur_t                  tap_dur;
-  ism6hg256x_wake_up_ths_t              wake_up_ths;
-  ism6hg256x_wake_up_dur_t              wake_up_dur;
-  ism6hg256x_free_fall_t                free_fall;
-  ism6hg256x_md1_cfg_t                  md1_cfg;
-  ism6hg256x_md2_cfg_t                  md2_cfg;
-  ism6hg256x_emb_func_cfg_t             emb_func_cfg;
-  ism6hg256x_ui_handshake_ctrl_t        ui_handshake_ctrl;
-  ism6hg256x_ui_if2_shared_0_t          ui_if2_shared_0;
-  ism6hg256x_ui_if2_shared_1_t          ui_if2_shared_1;
-  ism6hg256x_ui_if2_shared_2_t          ui_if2_shared_2;
-  ism6hg256x_ui_if2_shared_3_t          ui_if2_shared_3;
-  ism6hg256x_ui_if2_shared_4_t          ui_if2_shared_4;
-  ism6hg256x_ui_if2_shared_5_t          ui_if2_shared_5;
-  ism6hg256x_ctrl_eis_t                 ctrl_eis;
-  ism6hg256x_hg_x_ofs_usr_t             hg_x_ofs_usr;
-  ism6hg256x_hg_y_ofs_usr_t             hg_y_ofs_usr;
-  ism6hg256x_hg_z_ofs_usr_t             hg_z_ofs_usr;
-  ism6hg256x_ui_int_ois_t               ui_int_ois;
-  ism6hg256x_ui_ctrl1_ois_t             ui_ctrl1_ois;
-  ism6hg256x_ui_ctrl2_ois_t             ui_ctrl2_ois;
-  ism6hg256x_ui_ctrl3_ois_t             ui_ctrl3_ois;
-  ism6hg256x_x_ofs_usr_t                x_ofs_usr;
-  ism6hg256x_y_ofs_usr_t                y_ofs_usr;
-  ism6hg256x_z_ofs_usr_t                z_ofs_usr;
-  ism6hg256x_fifo_data_out_tag_t        fifo_data_out_tag;
-  ism6hg256x_fifo_data_out_x_l_t        fifo_data_out_x_l;
-  ism6hg256x_fifo_data_out_x_h_t        fifo_data_out_x_h;
-  ism6hg256x_fifo_data_out_y_l_t        fifo_data_out_y_l;
-  ism6hg256x_fifo_data_out_y_h_t        fifo_data_out_y_h;
-  ism6hg256x_fifo_data_out_z_l_t        fifo_data_out_z_l;
-  ism6hg256x_fifo_data_out_z_h_t        fifo_data_out_z_h;
-  /* IF2 registers */
-  ism6hg256x_if2_who_am_i_t             if2_who_am_i;
-  ism6hg256x_if2_status_reg_ois_t       if2_status_reg_ois;
-  ism6hg256x_if2_out_temp_l_t           if2_out_temp_l;
-  ism6hg256x_if2_out_temp_h_t           if2_out_temp_h;
-  ism6hg256x_if2_outx_l_g_ois_t         if2_outx_l_g_ois;
-  ism6hg256x_if2_outx_h_g_ois_t         if2_outx_h_g_ois;
-  ism6hg256x_if2_outy_l_g_ois_t         if2_outy_l_g_ois;
-  ism6hg256x_if2_outy_h_g_ois_t         if2_outy_h_g_ois;
-  ism6hg256x_if2_outz_l_g_ois_t         if2_outz_l_g_ois;
-  ism6hg256x_if2_outz_h_g_ois_t         if2_outz_h_g_ois;
-  ism6hg256x_if2_outx_l_a_ois_t         if2_outx_l_a_ois;
-  ism6hg256x_if2_outx_h_a_ois_t         if2_outx_h_a_ois;
-  ism6hg256x_if2_outy_l_a_ois_t         if2_outy_l_a_ois;
-  ism6hg256x_if2_outy_h_a_ois_t         if2_outy_h_a_ois;
-  ism6hg256x_if2_outz_l_a_ois_t         if2_outz_l_a_ois;
-  ism6hg256x_if2_outz_h_a_ois_t         if2_outz_h_a_ois;
-  ism6hg256x_if2_handshake_ctrl_t       if2_handshake_ctrl;
-  ism6hg256x_if2_int_ois_t              if2_int_ois;
-  ism6hg256x_if2_ctrl1_ois_t            if2_ctrl1_ois;
-  ism6hg256x_if2_ctrl2_ois_t            if2_ctrl2_ois;
-  ism6hg256x_if2_ctrl3_ois_t            if2_ctrl3_ois;
-  /* Embedded functions registers */
-  ism6hg256x_page_sel_t                 page_sel;
-  ism6hg256x_emb_func_en_a_t            emb_func_en_a;
-  ism6hg256x_emb_func_en_b_t            emb_func_en_b;
-  ism6hg256x_emb_func_exec_status_t     emb_func_exec_status;
-  ism6hg256x_page_address_t             page_address;
-  ism6hg256x_page_value_t               page_value;
-  ism6hg256x_emb_func_int1_t            emb_func_int1;
-  ism6hg256x_fsm_int1_t                 fsm_int1;
-  ism6hg256x_mlc_int1_t                 mlc_int1;
-  ism6hg256x_emb_func_int2_t            emb_func_int2;
-  ism6hg256x_fsm_int2_t                 fsm_int2;
-  ism6hg256x_mlc_int2_t                 mlc_int2;
-  ism6hg256x_emb_func_status_t          emb_func_status;
-  ism6hg256x_fsm_status_t               fsm_status;
-  ism6hg256x_mlc_status_t               mlc_status;
-  ism6hg256x_page_rw_t                  page_rw;
-  ism6hg256x_sflp_gbiasx_l_t            sflp_gbiasx_l;
-  ism6hg256x_sflp_gbiasx_h_t            sflp_gbiasx_h;
-  ism6hg256x_sflp_gbiasy_l_t            sflp_gbiasy_l;
-  ism6hg256x_sflp_gbiasy_h_t            sflp_gbiasy_h;
-  ism6hg256x_sflp_gbiasz_l_t            sflp_gbiasz_l;
-  ism6hg256x_sflp_gbiasz_h_t            sflp_gbiasz_h;
-  ism6hg256x_sflp_gravx_l_t             sflp_gravx_l;
-  ism6hg256x_sflp_gravx_h_t             sflp_gravx_h;
-  ism6hg256x_sflp_gravy_l_t             sflp_gravy_l;
-  ism6hg256x_sflp_gravy_h_t             sflp_gravy_h;
-  ism6hg256x_sflp_gravz_l_t             sflp_gravz_l;
-  ism6hg256x_sflp_gravz_h_t             sflp_gravz_h;
-  ism6hg256x_sflp_quatw_l_t             sflp_quatw_l;
-  ism6hg256x_sflp_quatw_h_t             sflp_quatw_h;
-  ism6hg256x_sflp_quatx_l_t             sflp_quatx_l;
-  ism6hg256x_sflp_quatx_h_t             sflp_quatx_h;
-  ism6hg256x_sflp_quaty_l_t             sflp_quaty_l;
-  ism6hg256x_sflp_quaty_h_t             sflp_quaty_h;
-  ism6hg256x_sflp_quatz_l_t             sflp_quatz_l;
-  ism6hg256x_sflp_quatz_h_t             sflp_quatz_h;
-  ism6hg256x_sflp_gbiasx_init_l_t       sflp_gbiasx_init_l;
-  ism6hg256x_sflp_gbiasx_init_h_t       sflp_gbiasx_init_h;
-  ism6hg256x_sflp_gbiasy_init_l_t       sflp_gbiasy_init_l;
-  ism6hg256x_sflp_gbiasy_init_h_t       sflp_gbiasy_init_h;
-  ism6hg256x_sflp_gbiasz_init_l_t       sflp_gbiasz_init_l;
-  ism6hg256x_sflp_gbiasz_init_h_t       sflp_gbiasz_init_h;
-  ism6hg256x_emb_func_fifo_en_a_t       emb_func_fifo_en_a;
-  ism6hg256x_emb_func_fifo_en_b_t       emb_func_fifo_en_b;
-  ism6hg256x_fsm_enable_t               fsm_enable;
-  ism6hg256x_fsm_long_counter_l_t       fsm_long_counter_l;
-  ism6hg256x_fsm_long_counter_h_t       fsm_long_counter_h;
-  ism6hg256x_int_ack_mask_t             int_ack_mask;
-  ism6hg256x_fsm_outs1_t                fsm_outs1;
-  ism6hg256x_fsm_outs2_t                fsm_outs2;
-  ism6hg256x_fsm_outs3_t                fsm_outs3;
-  ism6hg256x_fsm_outs4_t                fsm_outs4;
-  ism6hg256x_fsm_outs5_t                fsm_outs5;
-  ism6hg256x_fsm_outs6_t                fsm_outs6;
-  ism6hg256x_fsm_outs7_t                fsm_outs7;
-  ism6hg256x_fsm_outs8_t                fsm_outs8;
-  ism6hg256x_sflp_odr_t                 sflp_odr;
-  ism6hg256x_fsm_odr_t                  fsm_odr;
-  ism6hg256x_mlc_odr_t                  mlc_odr;
-  ism6hg256x_step_counter_l_t           step_counter_l;
-  ism6hg256x_step_counter_h_t           step_counter_h;
-  ism6hg256x_emb_func_src_t             emb_func_src;
-  ism6hg256x_emb_func_init_a_t          emb_func_init_a;
-  ism6hg256x_emb_func_init_b_t          emb_func_init_b;
-  ism6hg256x_emb_func_sensor_conv_en_t  emb_func_sensor_conv_en;
-  ism6hg256x_mlc1_src_t                 mlc1_src;
-  ism6hg256x_mlc2_src_t                 mlc2_src;
-  ism6hg256x_mlc3_src_t                 mlc3_src;
-  ism6hg256x_mlc4_src_t                 mlc4_src;
-  ism6hg256x_mlc5_src_t                 mlc5_src;
-  ism6hg256x_mlc6_src_t                 mlc6_src;
-  ism6hg256x_mlc7_src_t                 mlc7_src;
-  /* Embedded functions extended page 0 registers */
-  ism6hg256x_fsm_ext_sensitivity_l_t    fsm_ext_sensitivity_l;
-  ism6hg256x_fsm_ext_sensitivity_h_t    fsm_ext_sensitivity_h;
-  ism6hg256x_fsm_ext_offx_l_t           fsm_ext_offx_l;
-  ism6hg256x_fsm_ext_offx_h_t           fsm_ext_offx_h;
-  ism6hg256x_fsm_ext_offy_l_t           fsm_ext_offy_l;
-  ism6hg256x_fsm_ext_offy_h_t           fsm_ext_offy_h;
-  ism6hg256x_fsm_ext_offz_l_t           fsm_ext_offz_l;
-  ism6hg256x_fsm_ext_offz_h_t           fsm_ext_offz_h;
-  ism6hg256x_fsm_ext_matrix_xx_l_t      fsm_ext_matrix_xx_l;
-  ism6hg256x_fsm_ext_matrix_xx_h_t      fsm_ext_matrix_xx_h;
-  ism6hg256x_fsm_ext_matrix_xy_l_t      fsm_ext_matrix_xy_l;
-  ism6hg256x_fsm_ext_matrix_xy_h_t      fsm_ext_matrix_xy_h;
-  ism6hg256x_fsm_ext_matrix_xz_l_t      fsm_ext_matrix_xz_l;
-  ism6hg256x_fsm_ext_matrix_xz_h_t      fsm_ext_matrix_xz_h;
-  ism6hg256x_fsm_ext_matrix_yy_l_t      fsm_ext_matrix_yy_l;
-  ism6hg256x_fsm_ext_matrix_yy_h_t      fsm_ext_matrix_yy_h;
-  ism6hg256x_fsm_ext_matrix_yz_l_t      fsm_ext_matrix_yz_l;
-  ism6hg256x_fsm_ext_matrix_yz_h_t      fsm_ext_matrix_yz_h;
-  ism6hg256x_fsm_ext_matrix_zz_l_t      fsm_ext_matrix_zz_l;
-  ism6hg256x_fsm_ext_matrix_zz_h_t      fsm_ext_matrix_zz_h;
-  ism6hg256x_ext_cfg_a_t                ext_cfg_a;
-  ism6hg256x_ext_cfg_b_t                ext_cfg_b;
-  /* Embedded functions extended page 1 registers */
-  ism6hg256x_xl_hg_sensitivity_l_t      xl_hg_sensitivity_l;
-  ism6hg256x_xl_hg_sensitivity_h_t      xl_hg_sensitivity_h;
-  ism6hg256x_fsm_lc_timeout_l_t         fsm_lc_timeout_l;
-  ism6hg256x_fsm_lc_timeout_h_t         fsm_lc_timeout_h;
-  ism6hg256x_fsm_programs_t             fsm_programs;
-  ism6hg256x_fsm_start_add_l_t          fsm_start_add_l;
-  ism6hg256x_fsm_start_add_h_t          fsm_start_add_h;
-  ism6hg256x_pedo_cmd_reg_t             pedo_cmd_reg;
-  ism6hg256x_pedo_deb_steps_conf_t      pedo_deb_steps_conf;
-  ism6hg256x_pedo_sc_deltat_l_t         pedo_sc_deltat_l;
-  ism6hg256x_pedo_sc_deltat_h_t         pedo_sc_deltat_h;
-  ism6hg256x_mlc_ext_sensitivity_l_t    mlc_ext_sensitivity_l;
-  ism6hg256x_mlc_ext_sensitivity_h_t    mlc_ext_sensitivity_h;
-  /* Embedded functions extended page 2 registers */
-  ism6hg256x_ext_format_t               ext_format;
-  ism6hg256x_ext_3byte_sensitivity_l_t  ext_3byte_sensitivity_l;
-  ism6hg256x_ext_3byte_sensitivity_h_t  ext_3byte_sensitivity_h;
-  ism6hg256x_ext_3byte_offset_xl_t      ext_3byte_offset_xl;
-  ism6hg256x_ext_3byte_offset_l_t       ext_3byte_offset_l;
-  ism6hg256x_ext_3byte_offset_h_t       ext_3byte_offset_h;
-  /* Sensor HUB registers */
-  ism6hg256x_sensor_hub_1_t             sensor_hub_1;
-  ism6hg256x_sensor_hub_2_t             sensor_hub_2;
-  ism6hg256x_sensor_hub_3_t             sensor_hub_3;
-  ism6hg256x_sensor_hub_4_t             sensor_hub_4;
-  ism6hg256x_sensor_hub_5_t             sensor_hub_5;
-  ism6hg256x_sensor_hub_6_t             sensor_hub_6;
-  ism6hg256x_sensor_hub_7_t             sensor_hub_7;
-  ism6hg256x_sensor_hub_8_t             sensor_hub_8;
-  ism6hg256x_sensor_hub_9_t             sensor_hub_9;
-  ism6hg256x_sensor_hub_10_t            sensor_hub_10;
-  ism6hg256x_sensor_hub_11_t            sensor_hub_11;
-  ism6hg256x_sensor_hub_12_t            sensor_hub_12;
-  ism6hg256x_sensor_hub_13_t            sensor_hub_13;
-  ism6hg256x_sensor_hub_14_t            sensor_hub_14;
-  ism6hg256x_sensor_hub_15_t            sensor_hub_15;
-  ism6hg256x_sensor_hub_16_t            sensor_hub_16;
-  ism6hg256x_sensor_hub_17_t            sensor_hub_17;
-  ism6hg256x_sensor_hub_18_t            sensor_hub_18;
-  ism6hg256x_controller_config_t        controller_config;
-  ism6hg256x_tgt0_add_t                 tgt0_add;
-  ism6hg256x_tgt0_subadd_t              tgt0_subadd;
-  ism6hg256x_tgt0_config_t              tgt0_config;
-  ism6hg256x_tgt1_add_t                 tgt1_add;
-  ism6hg256x_tgt1_subadd_t              tgt1_subadd;
-  ism6hg256x_tgt1_config_t              tgt1_config;
-  ism6hg256x_tgt2_add_t                 tgt2_add;
-  ism6hg256x_tgt2_subadd_t              tgt2_subadd;
-  ism6hg256x_tgt2_config_t              tgt2_config;
-  ism6hg256x_tgt3_add_t                 tgt3_add;
-  ism6hg256x_tgt3_subadd_t              tgt3_subadd;
-  ism6hg256x_tgt3_config_t              tgt3_config;
-  ism6hg256x_datawrite_tgt0_t           datawrite_tgt0;
-  ism6hg256x_status_controller_t        status_controller;
-  bitwise_t                             bitwise;
-  uint8_t                               byte;
-} ism6hg256x_reg_t;
-
-/**
   * @}
   *
   */
@@ -4311,8 +3992,8 @@ typedef union
 #endif /* __weak */
 
 /**
-  * @defgroup  ISM6HG256X ISM6HG256X
-  * @brief     This file provides a set of functions needed to drive the
+  * @defgroup  ISM6HG256X_APIs ISM6HG256X APIs
+  * @brief     This section provides a set of functions needed to drive the
   *            ism6hg256x enhanced inertial module.
   * @{
   *
@@ -5075,65 +4756,65 @@ typedef struct
 } ism6hg256x_hg_wu_interrupt_cfg_t;
 
 /**
- * @brief   High-g wake-up interrupt configuration[set]
- *
- * @param  ctx    Read / write interface definitions.(ptr)
- * @param  val    ism6hg256x_hg_wu_interrupt_cfg_t.
- * @retval        Interface status (MANDATORY: return 0 -> no Error).
- *
- */
+  * @brief   High-g wake-up interrupt configuration[set]
+  *
+  * @param  ctx    Read / write interface definitions.(ptr)
+  * @param  val    ism6hg256x_hg_wu_interrupt_cfg_t.
+  * @retval        Interface status (MANDATORY: return 0 -> no Error).
+  *
+  */
 int32_t ism6hg256x_hg_wu_interrupt_cfg_set(const stmdev_ctx_t *ctx,
                                            ism6hg256x_hg_wu_interrupt_cfg_t val);
 
 /**
- * @brief   High-g wake-up interrupt configuration[get]
- *
- * @param  ctx    Read / write interface definitions.(ptr)
- * @param  val    ism6hg256x_hg_wu_interrupt_cfg_t.
- * @retval        Interface status (MANDATORY: return 0 -> no Error).
- *
- */
+  * @brief   High-g wake-up interrupt configuration[get]
+  *
+  * @param  ctx    Read / write interface definitions.(ptr)
+  * @param  val    ism6hg256x_hg_wu_interrupt_cfg_t.
+  * @retval        Interface status (MANDATORY: return 0 -> no Error).
+  *
+  */
 int32_t ism6hg256x_hg_wu_interrupt_cfg_get(const stmdev_ctx_t *ctx,
                                            ism6hg256x_hg_wu_interrupt_cfg_t *val);
 
 /**
- * @brief   Emable/disable user offset data correction driving to hg embedded functions[set]
- *
- * @param  ctx    Read / write interface definitions.(ptr)
- * @param  val    0: disable, 1: enable
- * @retval        Interface status (MANDATORY: return 0 -> no Error).
- *
- */
+  * @brief   Emable/disable user offset data correction driving to hg embedded functions[set]
+  *
+  * @param  ctx    Read / write interface definitions.(ptr)
+  * @param  val    0: disable, 1: enable
+  * @retval        Interface status (MANDATORY: return 0 -> no Error).
+  *
+  */
 int32_t ism6hg256x_hg_emb_usr_off_correction_set(const stmdev_ctx_t *ctx, uint8_t val);
 
 /**
- * @brief   Emable/disable user offset data correction driving to hg embedded functions[get]
- *
- * @param  ctx    Read / write interface definitions.(ptr)
- * @param  val    0: disable, 1: enable
- * @retval        Interface status (MANDATORY: return 0 -> no Error).
- *
- */
+  * @brief   Emable/disable user offset data correction driving to hg embedded functions[get]
+  *
+  * @param  ctx    Read / write interface definitions.(ptr)
+  * @param  val    0: disable, 1: enable
+  * @retval        Interface status (MANDATORY: return 0 -> no Error).
+  *
+  */
 int32_t ism6hg256x_hg_emb_usr_off_correction_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
 /**
- * @brief   Emable/disable user offset data correction driving to hg wake-up[set]
- *
- * @param  ctx    Read / write interface definitions.(ptr)
- * @param  val    0: disable, 1: enable
- * @retval        Interface status (MANDATORY: return 0 -> no Error).
- *
- */
+  * @brief   Emable/disable user offset data correction driving to hg wake-up[set]
+  *
+  * @param  ctx    Read / write interface definitions.(ptr)
+  * @param  val    0: disable, 1: enable
+  * @retval        Interface status (MANDATORY: return 0 -> no Error).
+  *
+  */
 int32_t ism6hg256x_hg_wu_usr_off_correction_set(const stmdev_ctx_t *ctx, uint8_t val);
 
 /**
- * @brief   Emable/disable user offset data correction driving to hg wake-up[get]
- *
- * @param  ctx    Read / write interface definitions.(ptr)
- * @param  val    0: disable, 1: enable
- * @retval        Interface status (MANDATORY: return 0 -> no Error).
- *
- */
+  * @brief   Emable/disable user offset data correction driving to hg wake-up[get]
+  *
+  * @param  ctx    Read / write interface definitions.(ptr)
+  * @param  val    0: disable, 1: enable
+  * @retval        Interface status (MANDATORY: return 0 -> no Error).
+  *
+  */
 int32_t ism6hg256x_hg_wu_usr_off_correction_get(const stmdev_ctx_t *ctx, uint8_t *val);
 
 /**
@@ -5345,8 +5026,7 @@ int32_t ism6hg256x_pin_int1_route_embedded_set(const stmdev_ctx_t *ctx,
   * @retval        Interface status (MANDATORY: return 0 -> no Error).
   *
   */
-int32_t ism6hg256x_pin_int1_route_embedded_get(const stmdev_ctx_t *ctx,
-                                               ism6hg256x_pin_int_route_t *val);
+int32_t ism6hg256x_pin_int1_route_embedded_get(const stmdev_ctx_t *ctx, ism6hg256x_pin_int_route_t *val);
 
 /**
   * @brief   Select the signals that need to be routed on int2 pad[set]
@@ -5369,8 +5049,7 @@ int32_t ism6hg256x_pin_int2_route_embedded_set(const stmdev_ctx_t *ctx,
   * @retval        Interface status (MANDATORY: return 0 -> no Error).
   *
   */
-int32_t ism6hg256x_pin_int2_route_embedded_get(const stmdev_ctx_t *ctx,
-                                               ism6hg256x_pin_int_route_t *val);
+int32_t ism6hg256x_pin_int2_route_embedded_get(const stmdev_ctx_t *ctx, ism6hg256x_pin_int_route_t *val);
 /**
   * @}
   *
@@ -9226,6 +8905,11 @@ int32_t ism6hg256x_act_wkup_time_windows_get(const stmdev_ctx_t *ctx,
 
 /**
   * @}
+  *
+  */
+
+/**
+  * @} closing LSM6DSV320X_sensor
   *
   */
 #ifdef __cplusplus
