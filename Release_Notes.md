@@ -30,7 +30,31 @@ This directory contains the ISM6HG256X component drivers.
 # Update history
 
 ::: {.collapse}
-<input type="checkbox" id="collapse-section10" checked aria-hidden="true">
+<input type="checkbox" id="collapse-section11" checked aria-hidden="true">
+<label for="collapse-section11" aria-hidden="true">V5.0.0 / 19-Nov-2026</label>
+<div>
+
+## Main changes
+
+- Fix MISRA issues
+
+  **Breaking change: API renaming**
+
+  API names have been updated to comply with **MISRA C:2012 Rule 5.1**, ensuring that
+  external identifiers are distinguishable within their first 31 characters.
+
+  This change breaks source and binary compatibility with previous driver versions.
+  Applications must update all references to the renamed APIs and be rebuilt against the
+  updated driver.
+
+- Fix timestamp_raw_get() API
+- reviewed indentation and doxygen doc
+
+##
+
+</div>
+
+<input type="checkbox" id="collapse-section10" aria-hidden="true">
 <label for="collapse-section10" aria-hidden="true">V4.4.0 / 09-Jul-2026</label>
 <div>
 
